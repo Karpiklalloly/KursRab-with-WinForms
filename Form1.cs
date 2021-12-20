@@ -13,15 +13,18 @@ using HardwareProviders.CPU;
 namespace WindowsFormsApp1
 {
 
-    
     public partial class Form1 : Form
     {
         private string _cpuName;
         
-        //Значения в байтах
+        //Значения в ГБайтах
         private double _ramTotal;
         private double _ramFree;
         private double _ramAllocated;
+
+        private double _cpuCurTemperature;
+        private double _cpuCurPower;
+        private double _cpuCurRate;
 
         public static Cpu CPU;
         private QueueLimited<double> _cpuTemperature;
@@ -29,6 +32,14 @@ namespace WindowsFormsApp1
         private QueueLimited<double> _cpuRate;
 
         private QueueLimited<double> _RAMAllocated;
+
+        private ToolTip _toolTipFOrCharts = new ToolTip
+        {
+            IsBalloon = false,
+            InitialDelay = 500,
+            Active = false,
+            ReshowDelay = 500
+        };
 
         public Form1()
         {
@@ -77,7 +88,7 @@ namespace WindowsFormsApp1
             chart_CPU_Rate.ChartAreas[0].AxisX.Minimum = 0;
             chart_CPU_Rate.ChartAreas[0].AxisX.Maximum = _cpuRate.Capacity-1;
             chart_CPU_Rate.ChartAreas[0].AxisY.Minimum = 0;
-            chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = WindowsFormsApp1.CPUParams.Rate.MaxRate;
+            chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = CPUParams.Rate.MaxRate;
             chart_CPU_Rate.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_CPU_Rate.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
 
@@ -93,9 +104,7 @@ namespace WindowsFormsApp1
 
         private void UpdateLabels()
         {
-            
-            _ramFree = RAMParams.Free.MemoryGB;
-            _ramAllocated = _ramTotal - _ramFree;
+           
             label_RAM_Info.Text = "Занаято памяти " + _ramAllocated + "/" + _ramTotal + " ГБайт";
 
         }
@@ -110,8 +119,8 @@ namespace WindowsFormsApp1
 
         private void UpdateChartCPUTemperature(bool drawChart = true)
         {
-            var temperature = WindowsFormsApp1.CPUParams.Temperature.CurTemperature;
-            _cpuTemperature.Add(temperature);
+            
+            _cpuTemperature.Add(_cpuCurTemperature);
             if (drawChart)
             {
                 chart_CPU_Temperature.Series[0].Points.Clear();
@@ -123,13 +132,12 @@ namespace WindowsFormsApp1
                 }
             }
 
-            label_test_info1.Text = temperature.ToString("0.00");
+            label_test_info1.Text = _cpuCurTemperature.ToString("0.00");
         }
 
         private void UpdateChartCPURate(bool drawChart = true)
         {
-            var rate = CPUParams.Rate.CurRate;
-            _cpuRate.Add(rate);
+            _cpuRate.Add(_cpuCurRate);
             if (drawChart)
             {
                 
@@ -142,13 +150,12 @@ namespace WindowsFormsApp1
                 }
             }
             
-            label_test_info3.Text = rate.ToString("0.00");
+            label_test_info3.Text = _cpuCurRate.ToString("0.00");
         }
 
         private void UpdateChartCPUPower(bool drawChart = true)
         {
-            var power = WindowsFormsApp1.CPUParams.Power.CurPower;
-            _cpuPower.Add(power);
+            _cpuPower.Add(_cpuCurPower);
             if (drawChart)
             {
                 chart_CPU_Power.Series[0].Points.Clear();
@@ -160,7 +167,7 @@ namespace WindowsFormsApp1
                 }
             }
             
-            label_test_info2.Text = power.ToString("0.00");
+            label_test_info2.Text = _cpuCurPower.ToString("0.00");
         }
 
         private void UpdateChartRAMAllocated(bool drawChart = true)
@@ -181,9 +188,14 @@ namespace WindowsFormsApp1
             //label_test_info2.Text = allocated.ToString("0.00");
         }
 
-        private void UpdateInfo()
+        private void UpdateData()
         {
-
+            CPU.Update();
+            _ramFree = RAMParams.Free.MemoryGB;
+            _ramAllocated = _ramTotal - _ramFree;
+            _cpuCurTemperature = CPUParams.Temperature.CurTemperature;
+            _cpuCurRate = CPUParams.Rate.CurRate;
+            _cpuCurPower = CPUParams.Power.CurPower;
         }
 
 
@@ -232,17 +244,12 @@ namespace WindowsFormsApp1
 
         private void timer_Update_Tick(object sender, EventArgs e)
         {
-            CPU.Update();
+            UpdateData();
             UpdateLabels();
             UpdateCharts();
             
         }
 
-        /// <summary>
-        /// Преобразует Байты в ГБайты
-        /// </summary>
-        /// <param name="num"></param>
-        /// <returns></returns>
         public static double ConvertBytesIntoGBytes(string num)
         {
             return ConvertBytesIntoGBytes(Convert.ToDouble(num));
@@ -251,6 +258,76 @@ namespace WindowsFormsApp1
         public static double ConvertBytesIntoGBytes(double num)
         {
             return Math.Round(num / (1024 * 1024), 2);
+        }
+
+        private void chart_CPU_Rate_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chart_CPU_Temperature_MouseMove(object sender, MouseEventArgs e)
+        {
+            int x = (int)Math.Round(chart_CPU_Temperature.ChartAreas[0].AxisX.PixelPositionToValue(e.X));
+            if (x < chart_CPU_Temperature.ChartAreas[0].AxisX.Minimum || x > chart_CPU_Temperature.ChartAreas[0].AxisX.Maximum)
+            {
+                return;
+            }
+
+            if (!_toolTipFOrCharts.Active)
+            {
+                _toolTipFOrCharts.Active = true;
+                _toolTipFOrCharts.SetToolTip(this.chart_CPU_Temperature, chart_CPU_Temperature.Series[0].Points[x].YValues[0].ToString("0.00"));
+            }
+        }
+
+        private void chart_CPU_Temperature_MouseHover(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void chart_CPU_Temperature_MouseLeave(object sender, EventArgs e)
+        {
+            _toolTipFOrCharts.Active = false;
+        }
+
+        private void chart_CPU_Power_MouseLeave(object sender, EventArgs e)
+        {
+            _toolTipFOrCharts.Active = false;
+        }
+
+        private void chart_CPU_Power_MouseMove(object sender, MouseEventArgs e)
+        {
+            int x = (int)Math.Round(chart_CPU_Power.ChartAreas[0].AxisX.PixelPositionToValue(e.X));
+            if (x < chart_CPU_Power.ChartAreas[0].AxisX.Minimum || x > chart_CPU_Power.ChartAreas[0].AxisX.Maximum)
+            {
+                return;
+            }
+
+            if (!_toolTipFOrCharts.Active)
+            {
+                _toolTipFOrCharts.Active = true;
+                _toolTipFOrCharts.SetToolTip(this.chart_CPU_Power, chart_CPU_Power.Series[0].Points[x].YValues[0].ToString("0.00"));
+            }
+        }
+
+        private void chart_CPU_Rate_MouseLeave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chart_CPU_Rate_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void chart_RAM_MouseLeave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chart_RAM_MouseMove(object sender, MouseEventArgs e)
+        {
+
         }
     }
 

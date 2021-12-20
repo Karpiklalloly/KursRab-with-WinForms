@@ -17,14 +17,20 @@ namespace WindowsFormsApp1.CPUParams
 
     public class Rate
     {
-        private static readonly double _maxRate = Convert.ToDouble(Form1.GetHardwareInfo("Win32_Processor", "MaxClockSpeed")[0]);
+        private static readonly double _maxRate = (double)Form1.CPU.CoreClocks[0].Max;
+        private static double _sum;
 
         public static double MaxRate { get { return _maxRate; } }
         public static double CurRate
         {
             get
             {
-                return (double)Form1.CPU.CoreClocks[0].Value;
+                _sum = 0;
+                for (int i = 0; i < Form1.CPU.CoreClocks.Length; i++)
+                {
+                    _sum += (double)Form1.CPU.CoreClocks[i].Value;
+                }
+                return _sum / Form1.CPU.CoreCount;
             }
         }
     }
