@@ -23,9 +23,7 @@ namespace WindowsFormsApp1
         private int _ramFree;
         private int _ramAllocated;
 
-        private int k = 0;
-
-        Cpu _cpu;
+        public static Cpu CPU;
         private QueueLimited<double> _cpuTemperature;
         private QueueLimited<double> _cpuPower;
         private QueueLimited<double> _cpuRate;
@@ -33,7 +31,7 @@ namespace WindowsFormsApp1
         public Form1()
         {
             InitializeComponent();
-            _cpu = Cpu.Discover()[0];
+            CPU = Cpu.Discover()[0];
             
             SetLabels();
             SetCharts();
@@ -76,7 +74,7 @@ namespace WindowsFormsApp1
             chart_CPU_Rate.ChartAreas[0].AxisX.Minimum = 0;
             chart_CPU_Rate.ChartAreas[0].AxisX.Maximum = _cpuRate.Capacity-1;
             chart_CPU_Rate.ChartAreas[0].AxisY.Minimum = 0;
-            chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = CPU.Rate.MaxRate;
+            chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = WindowsFormsApp1.CPUParams.Rate.MaxRate;
             chart_CPU_Rate.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_CPU_Rate.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
         }
@@ -94,46 +92,64 @@ namespace WindowsFormsApp1
 
         private void UpdateCharts()
         {
-            UpdateChartCPUTemperature();
-            UpdateChartCPUPower();
-            UpdateChartCPURate();
-
+            UpdateChartCPUTemperature(true);
+            UpdateChartCPUPower(true);
+            UpdateChartCPURate(true);
         }
 
-        private void UpdateChartCPUTemperature()
+        private void UpdateChartCPUTemperature(bool drawChart = true)
         {
-            chart_CPU_Temperature.Series[0].Points.Clear();
-            _cpuTemperature.Add(CPU.Temperature.CurTemperature);
-            int i = 0;
-            foreach (var item in _cpuTemperature)
+            var temperature = WindowsFormsApp1.CPUParams.Temperature.CurTemperature;
+            _cpuTemperature.Add(temperature);
+            if (drawChart)
             {
-                chart_CPU_Temperature.Series[0].Points.AddXY(i, item);
-                i++;
+                chart_CPU_Temperature.Series[0].Points.Clear();
+                int i = 0;
+                foreach (var item in _cpuTemperature)
+                {
+                    chart_CPU_Temperature.Series[0].Points.AddXY(i, item);
+                    i++;
+                }
             }
+
+            label_test_info1.Text = temperature.ToString("0.00");
         }
 
-        private void UpdateChartCPURate()
+        private void UpdateChartCPURate(bool drawChart = true)
         {
-            chart_CPU_Rate.Series[0].Points.Clear();
-            _cpuRate.Add(CPU.Rate.CurRate);
-            int i = 0;
-            foreach (var item in _cpuRate)
+            var rate = CPUParams.Rate.CurRate;
+            _cpuRate.Add(rate);
+            if (drawChart)
             {
-                chart_CPU_Rate.Series[0].Points.AddXY(i, item);
-                i++;
+                
+                chart_CPU_Rate.Series[0].Points.Clear();
+                int i = 0;
+                foreach (var item in _cpuRate)
+                {
+                    chart_CPU_Rate.Series[0].Points.AddXY(i, item);
+                    i++;
+                }
             }
+            
+            label_test_info3.Text = rate.ToString("0.00");
         }
 
-        private void UpdateChartCPUPower()
+        private void UpdateChartCPUPower(bool drawChart = true)
         {
-            chart_CPU_Power.Series[0].Points.Clear();
-            _cpuPower.Add(CPU.Power.CurPower);
-            int i = 0;
-            foreach (var item in _cpuPower)
+            var power = WindowsFormsApp1.CPUParams.Power.CurPower;
+            _cpuPower.Add(power);
+            if (drawChart)
             {
-                chart_CPU_Power.Series[0].Points.AddXY(i, item);
-                i++;
+                chart_CPU_Power.Series[0].Points.Clear();
+                int i = 0;
+                foreach (var item in _cpuPower)
+                {
+                    chart_CPU_Power.Series[0].Points.AddXY(i, item);
+                    i++;
+                }
             }
+            
+            label_test_info2.Text = power.ToString("0.00");
         }
 
         private void UpdateInfo()
@@ -162,7 +178,7 @@ namespace WindowsFormsApp1
                     result.Add(obj[ClassItemField].ToString().Trim());
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 var lab = new Label()
                 {
@@ -187,7 +203,7 @@ namespace WindowsFormsApp1
 
         private void timer_Update_Tick(object sender, EventArgs e)
         {
-            _cpu.Update();
+            CPU.Update();
             UpdateLabels();
             UpdateCharts();
             

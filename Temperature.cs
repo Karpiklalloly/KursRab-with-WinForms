@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Management;
 using System.Diagnostics;
 
-namespace WindowsFormsApp1.CPU
+namespace WindowsFormsApp1.CPUParams
 {
     public class Temperature
     {
@@ -22,14 +17,14 @@ namespace WindowsFormsApp1.CPU
 
     public class Rate
     {
-        private static double _maxRate = Convert.ToDouble(Form1.GetHardwareInfo("Win32_Processor", "MaxClockSpeed")[0]);
+        private static readonly double _maxRate = Convert.ToDouble(Form1.GetHardwareInfo("Win32_Processor", "MaxClockSpeed")[0]);
 
         public static double MaxRate { get { return _maxRate; } }
         public static double CurRate
         {
             get
             {
-                return Convert.ToDouble(Form1.GetHardwareInfo("Win32_Processor", "CurrentClockSpeed")[0]);
+                return (double)Form1.CPU.CoreClocks[0].Value;
             }
         }
     }
@@ -43,10 +38,12 @@ namespace WindowsFormsApp1.CPU
             {
                 if (_counter == null)
                 {
-                    _counter = new PerformanceCounter();
-                    _counter.CategoryName = "Processor";
-                    _counter.CounterName = "% Processor Time";
-                    _counter.InstanceName = "_Total";
+                    _counter = new PerformanceCounter
+                    {
+                        CategoryName = "Processor",
+                        CounterName = "% Processor Time",
+                        InstanceName = "_Total"
+                    };
                 }
                 return _counter.NextValue();
             }
