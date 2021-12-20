@@ -32,7 +32,22 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HardwareProviders.Board.Standard, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\HardwareProviders.Board.Standard.2.0.1\lib\netstandard2.0\HardwareProviders.Board.Standard.dll</HintPath>
+    </Reference>
+    <Reference Include="HardwareProviders.CPU.Standard, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\HardwareProviders.CPU.Standard.2.0.1\lib\netstandard2.0\HardwareProviders.CPU.Standard.dll</HintPath>
+    </Reference>
+    <Reference Include="HardwareProviders.HDD.Standard, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\HardwareProviders.HDD.Standard.2.0.1\lib\netstandard2.0\HardwareProviders.HDD.Standard.dll</HintPath>
+    </Reference>
+    <Reference Include="HardwareProviders.Standard, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\HardwareProviders.Standard.2.0.1\lib\netstandard2.0\HardwareProviders.Standard.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.CodeDom, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.CodeDom.6.0.0\lib\net461\System.CodeDom.dll</HintPath>
@@ -57,8 +72,11 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueueLimited.cs" />
+    <Compile Include="Temperature.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -71,6 +89,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
