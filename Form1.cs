@@ -19,14 +19,16 @@ namespace WindowsFormsApp1
         private string _cpuName;
         
         //Значения в байтах
-        private int _ramVisible;
-        private int _ramFree;
-        private int _ramAllocated;
+        private double _ramTotal;
+        private double _ramFree;
+        private double _ramAllocated;
 
         public static Cpu CPU;
         private QueueLimited<double> _cpuTemperature;
         private QueueLimited<double> _cpuPower;
         private QueueLimited<double> _cpuRate;
+
+        private QueueLimited<double> _RAMAllocated;
 
         public Form1()
         {
@@ -39,10 +41,9 @@ namespace WindowsFormsApp1
 
         private void SetLabels()
         {
-            _cpuName = Cpu.Discover()[0].Name;//GetHardwareInfo("Win32_Processor", "Name")[0];
+            _cpuName = Cpu.Discover()[0].Name;
             label_CPU_Info.Text = _cpuName;
-            _ramVisible = Convert.ToInt32(GetHardwareInfo("Win32_OperatingSystem", "TotalVisibleMemorySize")[0]);
-            //UpdateLabels();
+            _ramTotal = RAMParams.Total.MemoryGB;
         }
 
         private void SetCharts()
@@ -51,11 +52,13 @@ namespace WindowsFormsApp1
             _cpuTemperature = new QueueLimited<double>();
             _cpuPower = new QueueLimited<double>();
             _cpuRate = new QueueLimited<double>();
-            for (int i = 0; i < _cpuTemperature.Capacity;i++)
+            _RAMAllocated = new QueueLimited<double>();
+            for (int i = 0; i < _cpuTemperature.Capacity; i++)
             {
                 _cpuTemperature.Add(0);
                 _cpuPower.Add(0);
                 _cpuRate.Add(0);
+                _RAMAllocated.Add(0);
             }
             chart_CPU_Temperature.ChartAreas[0].AxisX.Minimum = 0;
             chart_CPU_Temperature.ChartAreas[0].AxisX.Maximum = _cpuTemperature.Capacity-1;
@@ -77,6 +80,13 @@ namespace WindowsFormsApp1
             chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = WindowsFormsApp1.CPUParams.Rate.MaxRate;
             chart_CPU_Rate.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_CPU_Rate.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+
+            chart_RAM.ChartAreas[0].AxisX.Minimum = 0;
+            chart_RAM.ChartAreas[0].AxisX.Maximum = _RAMAllocated.Capacity - 1;
+            chart_RAM.ChartAreas[0].AxisY.Minimum = 0;
+            chart_RAM.ChartAreas[0].AxisY.Maximum = _ramTotal;
+            chart_RAM.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chart_RAM.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
         }
 
 
@@ -84,17 +94,18 @@ namespace WindowsFormsApp1
         private void UpdateLabels()
         {
             
-            _ramFree = Convert.ToInt32(GetHardwareInfo("Win32_OperatingSystem", "FreePhysicalMemory")[0]);
-            _ramAllocated = _ramVisible - _ramFree;
-            label_RAM_Info.Text = "Доступно памяти " + ConvertBytesIntoGBytes(_ramFree) + "/" + ConvertBytesIntoGBytes(_ramVisible) + " ГБайт";
+            _ramFree = RAMParams.Free.MemoryGB;
+            _ramAllocated = _ramTotal - _ramFree;
+            label_RAM_Info.Text = "Занаято памяти " + _ramAllocated + "/" + _ramTotal + " ГБайт";
 
         }
 
         private void UpdateCharts()
         {
-            UpdateChartCPUTemperature(true);
-            UpdateChartCPUPower(true);
-            UpdateChartCPURate(true);
+            UpdateChartCPUTemperature();
+            UpdateChartCPUPower();
+            UpdateChartCPURate();
+            UpdateChartRAMAllocated();
         }
 
         private void UpdateChartCPUTemperature(bool drawChart = true)
@@ -150,6 +161,24 @@ namespace WindowsFormsApp1
             }
             
             label_test_info2.Text = power.ToString("0.00");
+        }
+
+        private void UpdateChartRAMAllocated(bool drawChart = true)
+        {
+            var allocated = RAMParams.Allocated.MemoryGB;
+            _RAMAllocated.Add(allocated);
+            if (drawChart)
+            {
+                chart_RAM.Series[0].Points.Clear();
+                int i = 0;
+                foreach (var item in _RAMAllocated)
+                {
+                    chart_RAM.Series[0].Points.AddXY(i, item);
+                    i++;
+                }
+            }
+
+            //label_test_info2.Text = allocated.ToString("0.00");
         }
 
         private void UpdateInfo()
@@ -214,12 +243,12 @@ namespace WindowsFormsApp1
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
-        private double ConvertBytesIntoGBytes(string num)
+        public static double ConvertBytesIntoGBytes(string num)
         {
             return ConvertBytesIntoGBytes(Convert.ToDouble(num));
         }
 
-        private double ConvertBytesIntoGBytes(double num)
+        public static double ConvertBytesIntoGBytes(double num)
         {
             return Math.Round(num / (1024 * 1024), 2);
         }

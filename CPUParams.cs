@@ -31,21 +31,18 @@ namespace WindowsFormsApp1.CPUParams
 
     public class Power
     {
-        private static PerformanceCounter _counter = null;
+        private static double _sum;
         public static double CurPower
         {
             get
             {
-                if (_counter == null)
+                _sum = 0;
+                for (int i = 0; i < Form1.CPU.CoreCount; i++)
                 {
-                    _counter = new PerformanceCounter
-                    {
-                        CategoryName = "Processor",
-                        CounterName = "% Processor Time",
-                        InstanceName = "_Total"
-                    };
+                    _sum += (double)Form1.CPU.CoreLoads[i].Value;
                 }
-                return _counter.NextValue();
+                return _sum / Form1.CPU.CoreCount;
+                
             }
         }
     }

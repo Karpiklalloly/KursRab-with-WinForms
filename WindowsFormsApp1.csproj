@@ -76,7 +76,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueLimited.cs" />
-    <Compile Include="Temperature.cs" />
+    <Compile Include="CPUParams.cs" />
+    <Compile Include="RAMParams.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
