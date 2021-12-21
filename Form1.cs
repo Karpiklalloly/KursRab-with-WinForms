@@ -46,7 +46,6 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
             CPU = Cpu.Discover()[0];
-            
             SetLabels();
             SetCharts();
         }
@@ -54,10 +53,8 @@ namespace WindowsFormsApp1
         private void SetLabels()
         {
             _cpuName = Cpu.Discover()[0].Name;
-            label_CPU_Info.Text = _cpuName;
+            groupBox_CPU.Text = _cpuName;
             _ramTotal = RAMParams.Total.MemoryGB;
-
-            
         }
 
         private void SetCharts()
@@ -338,6 +335,36 @@ namespace WindowsFormsApp1
                 _toolTipFOrCharts.Active = true;
                 _toolTipFOrCharts.SetToolTip(this.chart_RAM, chart_RAM.Series[0].Points[x].YValues[0].ToString("0.00"));
             }
+        }
+
+        private void label_RAM_Info_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chart_CPU_Power_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chart_CPU_Rate_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel7_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 
