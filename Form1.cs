@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Management;
 using HardwareProviders.CPU;
+using HardwareProviders.HDD;
 
 namespace WindowsFormsApp1
 {
@@ -33,7 +34,7 @@ namespace WindowsFormsApp1
 
         private QueueLimited<double> _RAMAllocated;
 
-        private ToolTip _toolTipFOrCharts = new ToolTip
+        private readonly ToolTip _toolTipFOrCharts = new ToolTip
         {
             IsBalloon = false,
             InitialDelay = 500,
@@ -55,6 +56,8 @@ namespace WindowsFormsApp1
             _cpuName = Cpu.Discover()[0].Name;
             label_CPU_Info.Text = _cpuName;
             _ramTotal = RAMParams.Total.MemoryGB;
+
+            
         }
 
         private void SetCharts()
@@ -106,68 +109,63 @@ namespace WindowsFormsApp1
         {
            
             label_RAM_Info.Text = "Занаято памяти " + _ramAllocated + "/" + _ramTotal + " ГБайт";
+            label_CPU_temperature.Text = "Температура, " + _cpuCurTemperature.ToString("0.00") + " °C";
+            label_CPU_Power.Text = "Нагрузка, " + _cpuCurPower.ToString("0.00") + " %";
+            label_CPU_Rate.Text = "Частота, " + _cpuCurRate.ToString("0.00") + " МГц";
+            
 
         }
 
         private void UpdateCharts()
         {
+            UpdateChartRAMAllocated();
             UpdateChartCPUTemperature();
             UpdateChartCPUPower();
             UpdateChartCPURate();
-            UpdateChartRAMAllocated();
+            
         }
 
-        private void UpdateChartCPUTemperature(bool drawChart = true)
+        private void UpdateChartCPUTemperature()
         {
             
             _cpuTemperature.Add(_cpuCurTemperature);
-            if (drawChart)
+            chart_CPU_Temperature.Series[0].Points.Clear();
+            int i = 0;
+            foreach (var item in _cpuTemperature)
             {
-                chart_CPU_Temperature.Series[0].Points.Clear();
-                int i = 0;
-                foreach (var item in _cpuTemperature)
-                {
-                    chart_CPU_Temperature.Series[0].Points.AddXY(i, item);
-                    i++;
-                }
+                chart_CPU_Temperature.Series[0].Points.AddXY(i, item);
+                i++;
             }
 
-            label_test_info1.Text = _cpuCurTemperature.ToString("0.00");
+            //label_test_info1.Text = _cpuCurTemperature.ToString("0.00");
         }
 
-        private void UpdateChartCPURate(bool drawChart = true)
+        private void UpdateChartCPURate()
         {
             _cpuRate.Add(_cpuCurRate);
-            if (drawChart)
+            chart_CPU_Rate.Series[0].Points.Clear();
+            int i = 0;
+            foreach (var item in _cpuRate)
             {
-                
-                chart_CPU_Rate.Series[0].Points.Clear();
-                int i = 0;
-                foreach (var item in _cpuRate)
-                {
-                    chart_CPU_Rate.Series[0].Points.AddXY(i, item);
-                    i++;
-                }
+                chart_CPU_Rate.Series[0].Points.AddXY(i, item);
+                i++;
             }
-            
-            label_test_info3.Text = _cpuCurRate.ToString("0.00");
+
+            //label_test_info3.Text = _cpuCurRate.ToString("0.00");
         }
 
-        private void UpdateChartCPUPower(bool drawChart = true)
+        private void UpdateChartCPUPower()
         {
             _cpuPower.Add(_cpuCurPower);
-            if (drawChart)
+            chart_CPU_Power.Series[0].Points.Clear();
+            int i = 0;
+            foreach (var item in _cpuPower)
             {
-                chart_CPU_Power.Series[0].Points.Clear();
-                int i = 0;
-                foreach (var item in _cpuPower)
-                {
-                    chart_CPU_Power.Series[0].Points.AddXY(i, item);
-                    i++;
-                }
+                chart_CPU_Power.Series[0].Points.AddXY(i, item);
+                i++;
             }
-            
-            label_test_info2.Text = _cpuCurPower.ToString("0.00");
+
+            //label_test_info2.Text = _cpuCurPower.ToString("0.00");
         }
 
         private void UpdateChartRAMAllocated(bool drawChart = true)
@@ -221,15 +219,7 @@ namespace WindowsFormsApp1
             }
             catch (Exception)
             {
-                var lab = new Label()
-                {
-                    Text = "Нет такого элемента",
-                    Dock = DockStyle.Fill,
-                    AutoSize = false,
-                    TextAlign = ContentAlignment.MiddleCenter,
-                };
-                
-                //chart_RAM.Controls.Add(lab);
+
             }
 
             return result;
@@ -245,9 +235,9 @@ namespace WindowsFormsApp1
         private void timer_Update_Tick(object sender, EventArgs e)
         {
             UpdateData();
-            UpdateLabels();
             UpdateCharts();
-            
+            UpdateLabels();
+
         }
 
         public static double ConvertBytesIntoGBytes(string num)
@@ -312,22 +302,42 @@ namespace WindowsFormsApp1
 
         private void chart_CPU_Rate_MouseLeave(object sender, EventArgs e)
         {
-
+            _toolTipFOrCharts.Active = false;
         }
 
         private void chart_CPU_Rate_MouseMove(object sender, MouseEventArgs e)
         {
+            int x = (int)Math.Round(chart_CPU_Rate.ChartAreas[0].AxisX.PixelPositionToValue(e.X));
+            if (x < chart_CPU_Rate.ChartAreas[0].AxisX.Minimum || x > chart_CPU_Rate.ChartAreas[0].AxisX.Maximum)
+            {
+                return;
+            }
 
+            if (!_toolTipFOrCharts.Active)
+            {
+                _toolTipFOrCharts.Active = true;
+                _toolTipFOrCharts.SetToolTip(this.chart_CPU_Rate, chart_CPU_Rate.Series[0].Points[x].YValues[0].ToString("0.00"));
+            }
         }
 
         private void chart_RAM_MouseLeave(object sender, EventArgs e)
         {
-
+            _toolTipFOrCharts.Active = false;
         }
 
         private void chart_RAM_MouseMove(object sender, MouseEventArgs e)
         {
+            int x = (int)Math.Round(chart_RAM.ChartAreas[0].AxisX.PixelPositionToValue(e.X));
+            if (x < chart_RAM.ChartAreas[0].AxisX.Minimum || x > chart_RAM.ChartAreas[0].AxisX.Maximum)
+            {
+                return;
+            }
 
+            if (!_toolTipFOrCharts.Active)
+            {
+                _toolTipFOrCharts.Active = true;
+                _toolTipFOrCharts.SetToolTip(this.chart_RAM, chart_RAM.Series[0].Points[x].YValues[0].ToString("0.00"));
+            }
         }
     }
 
