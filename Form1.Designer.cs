@@ -29,28 +29,27 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea16 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea17 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea18 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea19 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series19 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea20 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series20 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea11 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea12 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea13 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea14 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea15 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart_CPU_Temperature = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chart_CPU_Power = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chart_CPU_Rate = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.groupBox_CPU = new System.Windows.Forms.GroupBox();
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.label_CPU_Rate = new System.Windows.Forms.Label();
-            this.label_CPU_Power = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.label_CPU_temperature = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.label_CPU_Power = new System.Windows.Forms.Label();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.label_CPU_Rate = new System.Windows.Forms.Label();
             this.timer_Update = new System.Windows.Forms.Timer(this.components);
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -68,9 +67,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Power)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Rate)).BeginInit();
             this.groupBox_CPU.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel6.SuspendLayout();
-            this.panel4.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel8.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -84,17 +83,20 @@
             // 
             // chart_CPU_Temperature
             // 
-            chartArea16.Name = "ChartArea1";
-            this.chart_CPU_Temperature.ChartAreas.Add(chartArea16);
+            this.chart_CPU_Temperature.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea11.Name = "ChartArea1";
+            this.chart_CPU_Temperature.ChartAreas.Add(chartArea11);
             this.chart_CPU_Temperature.Location = new System.Drawing.Point(8, 27);
             this.chart_CPU_Temperature.Margin = new System.Windows.Forms.Padding(4);
             this.chart_CPU_Temperature.Name = "chart_CPU_Temperature";
-            series16.ChartArea = "ChartArea1";
-            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series16.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            series16.Name = "Series1";
-            series16.ToolTip = "#VALY";
-            this.chart_CPU_Temperature.Series.Add(series16);
+            series11.ChartArea = "ChartArea1";
+            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series11.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            series11.Name = "Series1";
+            series11.ToolTip = "#VALY";
+            this.chart_CPU_Temperature.Series.Add(series11);
             this.chart_CPU_Temperature.Size = new System.Drawing.Size(296, 143);
             this.chart_CPU_Temperature.TabIndex = 0;
             this.chart_CPU_Temperature.Text = "chart1";
@@ -103,19 +105,21 @@
             // 
             // chart_CPU_Power
             // 
-            this.chart_CPU_Power.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea17.Name = "ChartArea1";
-            this.chart_CPU_Power.ChartAreas.Add(chartArea17);
+            this.chart_CPU_Power.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea12.Name = "ChartArea1";
+            this.chart_CPU_Power.ChartAreas.Add(chartArea12);
             this.chart_CPU_Power.Location = new System.Drawing.Point(8, 27);
             this.chart_CPU_Power.Margin = new System.Windows.Forms.Padding(4);
             this.chart_CPU_Power.Name = "chart_CPU_Power";
-            series17.BackSecondaryColor = System.Drawing.Color.Cyan;
-            series17.ChartArea = "ChartArea1";
-            series17.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series17.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            series17.LabelForeColor = System.Drawing.Color.IndianRed;
-            series17.Name = "Series1";
-            this.chart_CPU_Power.Series.Add(series17);
+            series12.BackSecondaryColor = System.Drawing.Color.Cyan;
+            series12.ChartArea = "ChartArea1";
+            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series12.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            series12.LabelForeColor = System.Drawing.Color.IndianRed;
+            series12.Name = "Series1";
+            this.chart_CPU_Power.Series.Add(series12);
             this.chart_CPU_Power.Size = new System.Drawing.Size(296, 143);
             this.chart_CPU_Power.TabIndex = 1;
             this.chart_CPU_Power.Text = "chart2";
@@ -125,18 +129,19 @@
             // 
             // chart_CPU_Rate
             // 
-            this.chart_CPU_Rate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.chart_CPU_Rate.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea18.Name = "ChartArea1";
-            this.chart_CPU_Rate.ChartAreas.Add(chartArea18);
+            chartArea13.Name = "ChartArea1";
+            this.chart_CPU_Rate.ChartAreas.Add(chartArea13);
             this.chart_CPU_Rate.Location = new System.Drawing.Point(8, 27);
             this.chart_CPU_Rate.Margin = new System.Windows.Forms.Padding(4);
             this.chart_CPU_Rate.Name = "chart_CPU_Rate";
-            series18.ChartArea = "ChartArea1";
-            series18.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series18.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            series18.Name = "Series1";
-            this.chart_CPU_Rate.Series.Add(series18);
+            series13.ChartArea = "ChartArea1";
+            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series13.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            series13.Name = "Series1";
+            this.chart_CPU_Rate.Series.Add(series13);
             this.chart_CPU_Rate.Size = new System.Drawing.Size(296, 143);
             this.chart_CPU_Rate.TabIndex = 2;
             this.chart_CPU_Rate.Text = "chart3";
@@ -146,6 +151,8 @@
             // 
             // groupBox_CPU
             // 
+            this.groupBox_CPU.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox_CPU.Controls.Add(this.panel4);
             this.groupBox_CPU.Controls.Add(this.panel5);
             this.groupBox_CPU.Controls.Add(this.panel6);
@@ -153,58 +160,18 @@
             this.groupBox_CPU.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox_CPU.Name = "groupBox_CPU";
             this.groupBox_CPU.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox_CPU.Size = new System.Drawing.Size(322, 571);
+            this.groupBox_CPU.Size = new System.Drawing.Size(322, 549);
             this.groupBox_CPU.TabIndex = 4;
             this.groupBox_CPU.TabStop = false;
             this.groupBox_CPU.Text = "Процессор";
             // 
-            // panel5
-            // 
-            this.panel5.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panel5.Controls.Add(this.label_CPU_Power);
-            this.panel5.Controls.Add(this.chart_CPU_Power);
-            this.panel5.Location = new System.Drawing.Point(5, 22);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(310, 179);
-            this.panel5.TabIndex = 15;
-            // 
-            // panel6
-            // 
-            this.panel6.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.panel6.Controls.Add(this.chart_CPU_Rate);
-            this.panel6.Controls.Add(this.label_CPU_Rate);
-            this.panel6.Location = new System.Drawing.Point(5, 207);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(310, 179);
-            this.panel6.TabIndex = 16;
-            // 
-            // label_CPU_Rate
-            // 
-            this.label_CPU_Rate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label_CPU_Rate.AutoSize = true;
-            this.label_CPU_Rate.Location = new System.Drawing.Point(5, 7);
-            this.label_CPU_Rate.Name = "label_CPU_Rate";
-            this.label_CPU_Rate.Size = new System.Drawing.Size(93, 16);
-            this.label_CPU_Rate.TabIndex = 3;
-            this.label_CPU_Rate.Text = "Частота, МГц";
-            // 
-            // label_CPU_Power
-            // 
-            this.label_CPU_Power.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label_CPU_Power.AutoSize = true;
-            this.label_CPU_Power.Location = new System.Drawing.Point(5, 7);
-            this.label_CPU_Power.Name = "label_CPU_Power";
-            this.label_CPU_Power.Size = new System.Drawing.Size(88, 16);
-            this.label_CPU_Power.TabIndex = 4;
-            this.label_CPU_Power.Text = "Нагрузка, %";
-            // 
             // panel4
             // 
-            this.panel4.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel4.Controls.Add(this.label_CPU_temperature);
             this.panel4.Controls.Add(this.chart_CPU_Temperature);
-            this.panel4.Location = new System.Drawing.Point(5, 392);
+            this.panel4.Location = new System.Drawing.Point(5, 370);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(310, 179);
             this.panel4.TabIndex = 14;
@@ -220,6 +187,48 @@
             this.label_CPU_temperature.TabIndex = 11;
             this.label_CPU_temperature.Text = "Температура, °C";
             // 
+            // panel5
+            // 
+            this.panel5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel5.Controls.Add(this.label_CPU_Power);
+            this.panel5.Controls.Add(this.chart_CPU_Power);
+            this.panel5.Location = new System.Drawing.Point(5, 22);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(310, 179);
+            this.panel5.TabIndex = 15;
+            // 
+            // label_CPU_Power
+            // 
+            this.label_CPU_Power.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_CPU_Power.AutoSize = true;
+            this.label_CPU_Power.Location = new System.Drawing.Point(5, 7);
+            this.label_CPU_Power.Name = "label_CPU_Power";
+            this.label_CPU_Power.Size = new System.Drawing.Size(88, 16);
+            this.label_CPU_Power.TabIndex = 4;
+            this.label_CPU_Power.Text = "Нагрузка, %";
+            // 
+            // panel6
+            // 
+            this.panel6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel6.Controls.Add(this.chart_CPU_Rate);
+            this.panel6.Controls.Add(this.label_CPU_Rate);
+            this.panel6.Location = new System.Drawing.Point(5, 196);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(310, 179);
+            this.panel6.TabIndex = 16;
+            // 
+            // label_CPU_Rate
+            // 
+            this.label_CPU_Rate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_CPU_Rate.AutoSize = true;
+            this.label_CPU_Rate.Location = new System.Drawing.Point(5, 7);
+            this.label_CPU_Rate.Name = "label_CPU_Rate";
+            this.label_CPU_Rate.Size = new System.Drawing.Size(93, 16);
+            this.label_CPU_Rate.TabIndex = 3;
+            this.label_CPU_Rate.Text = "Частота, МГц";
+            // 
             // timer_Update
             // 
             this.timer_Update.Enabled = true;
@@ -228,15 +237,14 @@
             // 
             // panel1
             // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.AutoScroll = true;
             this.panel1.AutoSize = true;
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.Controls.Add(this.groupBox_CPU);
-            this.panel1.Location = new System.Drawing.Point(21, 28);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(330, 579);
+            this.panel1.Size = new System.Drawing.Size(330, 553);
             this.panel1.TabIndex = 11;
             // 
             // panel2
@@ -262,18 +270,20 @@
             // 
             // panel8
             // 
-            this.panel8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel8.AutoScroll = true;
             this.panel8.AutoSize = true;
+            this.panel8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel8.Controls.Add(this.groupBox3);
-            this.panel8.Location = new System.Drawing.Point(703, 28);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel8.Location = new System.Drawing.Point(742, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(340, 229);
-            this.panel8.TabIndex = 16;
+            this.panel8.Size = new System.Drawing.Size(340, 553);
+            this.panel8.TabIndex = 15;
             // 
             // groupBox3
             // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox3.Controls.Add(this.panel9);
             this.groupBox3.Location = new System.Drawing.Point(4, 4);
@@ -287,7 +297,9 @@
             // 
             // panel9
             // 
-            this.panel9.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.panel9.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel9.Controls.Add(this.label1);
             this.panel9.Controls.Add(this.chart1);
             this.panel9.Location = new System.Drawing.Point(7, 22);
@@ -312,52 +324,60 @@
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea19.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea19);
+            chartArea14.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea14);
             this.chart1.Location = new System.Drawing.Point(8, 24);
             this.chart1.Margin = new System.Windows.Forms.Padding(4);
             this.chart1.Name = "chart1";
-            series19.ChartArea = "ChartArea1";
-            series19.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series19.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            series19.Name = "Series1";
-            this.chart1.Series.Add(series19);
+            series14.ChartArea = "ChartArea1";
+            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series14.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            series14.Name = "Series1";
+            this.chart1.Series.Add(series14);
             this.chart1.Size = new System.Drawing.Size(296, 143);
             this.chart1.TabIndex = 10;
             this.chart1.Text = "chart1";
             // 
             // panel7
             // 
-            this.panel7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.panel7.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel7.AutoScroll = true;
-            this.panel7.AutoSize = true;
+            this.panel7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel7.Controls.Add(this.groupBox2);
-            this.panel7.Location = new System.Drawing.Point(357, 28);
+            this.panel7.Location = new System.Drawing.Point(361, 0);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(340, 229);
-            this.panel7.TabIndex = 15;
+            this.panel7.Size = new System.Drawing.Size(357, 234);
+            this.panel7.TabIndex = 16;
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox2.Controls.Add(this.panel10);
             this.groupBox2.Location = new System.Drawing.Point(4, 4);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox2.Size = new System.Drawing.Size(332, 221);
+            this.groupBox2.Size = new System.Drawing.Size(345, 219);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "ОЗУ";
             // 
             // panel10
             // 
-            this.panel10.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.panel10.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel10.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel10.Controls.Add(this.chart_RAM);
             this.panel10.Controls.Add(this.label_RAM_Info);
             this.panel10.Location = new System.Drawing.Point(7, 22);
             this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(310, 179);
+            this.panel10.Size = new System.Drawing.Size(320, 179);
             this.panel10.TabIndex = 17;
             // 
             // chart_RAM
@@ -365,16 +385,16 @@
             this.chart_RAM.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea20.Name = "ChartArea1";
-            this.chart_RAM.ChartAreas.Add(chartArea20);
-            this.chart_RAM.Location = new System.Drawing.Point(8, 27);
+            chartArea15.Name = "ChartArea1";
+            this.chart_RAM.ChartAreas.Add(chartArea15);
+            this.chart_RAM.Location = new System.Drawing.Point(8, 24);
             this.chart_RAM.Margin = new System.Windows.Forms.Padding(4);
             this.chart_RAM.Name = "chart_RAM";
-            series20.ChartArea = "ChartArea1";
-            series20.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series20.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            series20.Name = "Series1";
-            this.chart_RAM.Series.Add(series20);
+            series15.ChartArea = "ChartArea1";
+            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series15.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            series15.Name = "Series1";
+            this.chart_RAM.Series.Add(series15);
             this.chart_RAM.Size = new System.Drawing.Size(296, 143);
             this.chart_RAM.TabIndex = 10;
             this.chart_RAM.Text = "chart1";
@@ -410,12 +430,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Power)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Rate)).EndInit();
             this.groupBox_CPU.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel8.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
@@ -442,7 +462,6 @@
         private System.Windows.Forms.Label label_CPU_temperature;
         private System.Windows.Forms.Label label_CPU_Power;
         private System.Windows.Forms.Label label_CPU_Rate;
-        private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
