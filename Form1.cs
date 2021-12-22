@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Management;
 using HardwareProviders.CPU;
 using HardwareProviders.HDD;
+using System.IO;
 
 namespace WindowsFormsApp1
 {
@@ -28,24 +29,31 @@ namespace WindowsFormsApp1
         private double _cpuCurRate;
 
         public static Cpu CPU;
+        public static DriveInfo[] HDDS;
+        public static System.Windows.Forms.DataVisualization.Charting.Chart[] HDDCharts;
         private QueueLimited<double> _cpuTemperature;
         private QueueLimited<double> _cpuPower;
         private QueueLimited<double> _cpuRate;
 
+        private QueueLimited<double>[] HDDQueues;
+
         private QueueLimited<double> _RAMAllocated;
+
+        static int indexOfPanel = 0;
 
         private readonly ToolTip _toolTipFOrCharts = new ToolTip
         {
             IsBalloon = false,
             InitialDelay = 500,
             Active = false,
-            ReshowDelay = 500
+            ReshowDelay = 100,
         };
 
         public Form1()
         {
             InitializeComponent();
             CPU = Cpu.Discover()[0];
+            HDDS = DriveInfo.GetDrives();
             SetLabels();
             SetCharts();
         }
@@ -55,6 +63,16 @@ namespace WindowsFormsApp1
             _cpuName = Cpu.Discover()[0].Name;
             groupBox_CPU.Text = _cpuName;
             _ramTotal = RAMParams.Total.MemoryGB;
+            HDDQueues = new QueueLimited<double>[HDDS.Length];
+            HDDCharts = new System.Windows.Forms.DataVisualization.Charting.Chart[HDDS.Length];
+            for (int i = 0; i < 10/*HDDS.Length*/; i++)
+            {
+                
+                AddPanelToBox(ref groupBox_HDD, 0);
+                HDDQueues[0] = new QueueLimited<double>();
+            }
+            
+
         }
 
         private void SetCharts()
@@ -70,6 +88,10 @@ namespace WindowsFormsApp1
                 _cpuPower.Add(0);
                 _cpuRate.Add(0);
                 _RAMAllocated.Add(0);
+                for (int j = 0; j < HDDS.Length; j++)
+                {
+                    HDDQueues[j].Add(0);
+                }
             }
             chart_CPU_Temperature.ChartAreas[0].AxisX.Minimum = 0;
             chart_CPU_Temperature.ChartAreas[0].AxisX.Maximum = _cpuTemperature.Capacity-1;
@@ -109,8 +131,6 @@ namespace WindowsFormsApp1
             label_CPU_temperature.Text = "Температура, " + _cpuCurTemperature.ToString("0.00") + " °C";
             label_CPU_Power.Text = "Нагрузка, " + _cpuCurPower.ToString("0.00") + " %";
             label_CPU_Rate.Text = "Частота, " + _cpuCurRate.ToString("0.00") + " МГц";
-            
-
         }
 
         private void UpdateCharts()
@@ -119,7 +139,6 @@ namespace WindowsFormsApp1
             UpdateChartCPUTemperature();
             UpdateChartCPUPower();
             UpdateChartCPURate();
-            
         }
 
         private void UpdateChartCPUTemperature()
@@ -365,6 +384,42 @@ namespace WindowsFormsApp1
         private void panel7_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        {
+            
+        }
+
+        private void AddPanelToBox(ref GroupBox groupBox, int hardIndex)
+        {
+            
+            Panel panel = new Panel();
+            panel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            panel.AutoSize = true;
+            panel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panel.Location = new System.Drawing.Point(5, 22+indexOfPanel*185);
+            groupBox.Controls.Add(panel);
+            
+            Label label = new Label();
+            label.Location = new System.Drawing.Point(5, 7);
+            label.Text = "Диск " + HDDS[hardIndex].Name.Substring(0, HDDS[hardIndex].Name.Length-2) + " " + indexOfPanel.ToString();
+            panel.Controls.Add(label);
+
+            HDDCharts[hardIndex] = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            HDDCharts[hardIndex].Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+            HDDCharts[hardIndex].Size = new System.Drawing.Size(296, 143);
+            HDDCharts[hardIndex].Location = new System.Drawing.Point(8, 27);
+            HDDCharts[hardIndex].Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            panel.Controls.Add(HDDCharts[hardIndex]);
+
+            indexOfPanel++;
+            var t = panel1.Controls.Count;
+        }
+
+        private void vScrollBar1_Scroll_1(object sender, ScrollEventArgs e)
+        {
+            panel1.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - (panel1.Height/125)*(e.NewValue-e.OldValue));
         }
     }
 
