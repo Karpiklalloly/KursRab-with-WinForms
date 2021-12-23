@@ -38,7 +38,6 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart_CPU_Temperature = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chart_CPU_Power = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -52,6 +51,7 @@
             this.label_CPU_Rate = new System.Windows.Forms.Label();
             this.timer_Update = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.groupBox_HDD = new System.Windows.Forms.GroupBox();
             this.groupBox_RAM = new System.Windows.Forms.GroupBox();
             this.panel10 = new System.Windows.Forms.Panel();
             this.chart_RAM = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -59,9 +59,8 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
-            this.groupBox_HDD = new System.Windows.Forms.GroupBox();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chart_BIG = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Temperature)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Power)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Rate)).BeginInit();
@@ -73,7 +72,7 @@
             this.groupBox_RAM.SuspendLayout();
             this.panel10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart_RAM)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_BIG)).BeginInit();
             this.SuspendLayout();
             // 
             // chart_CPU_Temperature
@@ -95,6 +94,7 @@
             this.chart_CPU_Temperature.Size = new System.Drawing.Size(296, 143);
             this.chart_CPU_Temperature.TabIndex = 0;
             this.chart_CPU_Temperature.Text = "chart1";
+            this.chart_CPU_Temperature.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             this.chart_CPU_Temperature.MouseLeave += new System.EventHandler(this.chart_CPU_Temperature_MouseLeave);
             this.chart_CPU_Temperature.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart_CPU_Temperature_MouseMove);
             // 
@@ -119,6 +119,7 @@
             this.chart_CPU_Power.TabIndex = 1;
             this.chart_CPU_Power.Text = "chart2";
             this.chart_CPU_Power.Click += new System.EventHandler(this.chart_CPU_Power_Click);
+            this.chart_CPU_Power.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             this.chart_CPU_Power.MouseLeave += new System.EventHandler(this.chart_CPU_Power_MouseLeave);
             this.chart_CPU_Power.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart_CPU_Power_MouseMove);
             // 
@@ -141,6 +142,7 @@
             this.chart_CPU_Rate.TabIndex = 2;
             this.chart_CPU_Rate.Text = "chart3";
             this.chart_CPU_Rate.Click += new System.EventHandler(this.chart_CPU_Rate_Click_1);
+            this.chart_CPU_Rate.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             this.chart_CPU_Rate.MouseLeave += new System.EventHandler(this.chart_CPU_Rate_MouseLeave);
             this.chart_CPU_Rate.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart_CPU_Rate_MouseMove);
             // 
@@ -170,6 +172,9 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(310, 179);
             this.panel4.TabIndex = 14;
+            this.panel4.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
+            this.panel4.MouseLeave += new System.EventHandler(this.panel10_MouseLeave);
+            this.panel4.MouseHover += new System.EventHandler(this.panel5_MouseHover);
             // 
             // label_CPU_temperature
             // 
@@ -181,6 +186,7 @@
             this.label_CPU_temperature.Size = new System.Drawing.Size(115, 16);
             this.label_CPU_temperature.TabIndex = 11;
             this.label_CPU_temperature.Text = "Температура, °C";
+            this.label_CPU_temperature.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             // 
             // panel5
             // 
@@ -190,8 +196,11 @@
             this.panel5.Controls.Add(this.chart_CPU_Power);
             this.panel5.Location = new System.Drawing.Point(5, 22);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(310, 179);
+            this.panel5.Size = new System.Drawing.Size(308, 177);
             this.panel5.TabIndex = 15;
+            this.panel5.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
+            this.panel5.MouseLeave += new System.EventHandler(this.panel10_MouseLeave);
+            this.panel5.MouseHover += new System.EventHandler(this.panel5_MouseHover);
             // 
             // label_CPU_Power
             // 
@@ -202,6 +211,7 @@
             this.label_CPU_Power.Size = new System.Drawing.Size(88, 16);
             this.label_CPU_Power.TabIndex = 4;
             this.label_CPU_Power.Text = "Нагрузка, %";
+            this.label_CPU_Power.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             // 
             // panel6
             // 
@@ -213,6 +223,9 @@
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(310, 179);
             this.panel6.TabIndex = 16;
+            this.panel6.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
+            this.panel6.MouseLeave += new System.EventHandler(this.panel10_MouseLeave);
+            this.panel6.MouseHover += new System.EventHandler(this.panel5_MouseHover);
             // 
             // label_CPU_Rate
             // 
@@ -224,6 +237,7 @@
             this.label_CPU_Rate.Size = new System.Drawing.Size(93, 16);
             this.label_CPU_Rate.TabIndex = 3;
             this.label_CPU_Rate.Text = "Частота, МГц";
+            this.label_CPU_Rate.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             // 
             // timer_Update
             // 
@@ -240,8 +254,22 @@
             this.panel1.Controls.Add(this.groupBox_RAM);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(332, 895);
+            this.panel1.Size = new System.Drawing.Size(332, 861);
             this.panel1.TabIndex = 11;
+            this.panel1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll_1);
+            // 
+            // groupBox_HDD
+            // 
+            this.groupBox_HDD.AutoSize = true;
+            this.groupBox_HDD.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.groupBox_HDD.Location = new System.Drawing.Point(4, 850);
+            this.groupBox_HDD.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBox_HDD.Name = "groupBox_HDD";
+            this.groupBox_HDD.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox_HDD.Size = new System.Drawing.Size(8, 7);
+            this.groupBox_HDD.TabIndex = 4;
+            this.groupBox_HDD.TabStop = false;
+            this.groupBox_HDD.Text = "Жесткие диски";
             // 
             // groupBox_RAM
             // 
@@ -267,6 +295,10 @@
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(312, 179);
             this.panel10.TabIndex = 17;
+            this.panel10.Paint += new System.Windows.Forms.PaintEventHandler(this.panel10_Paint);
+            this.panel10.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
+            this.panel10.MouseLeave += new System.EventHandler(this.panel10_MouseLeave);
+            this.panel10.MouseHover += new System.EventHandler(this.panel5_MouseHover);
             // 
             // chart_RAM
             // 
@@ -286,6 +318,7 @@
             this.chart_RAM.Size = new System.Drawing.Size(296, 143);
             this.chart_RAM.TabIndex = 10;
             this.chart_RAM.Text = "chart1";
+            this.chart_RAM.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             // 
             // label_RAM_Info
             // 
@@ -298,13 +331,14 @@
             this.label_RAM_Info.Size = new System.Drawing.Size(92, 16);
             this.label_RAM_Info.TabIndex = 6;
             this.label_RAM_Info.Text = "Занято x из y";
+            this.label_RAM_Info.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             // 
             // panel2
             // 
             this.panel2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.panel2.AutoSize = true;
             this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel2.Location = new System.Drawing.Point(-49, 15);
+            this.panel2.Location = new System.Drawing.Point(-89, 15);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(0, 0);
             this.panel2.TabIndex = 12;
@@ -315,7 +349,7 @@
             this.panel3.AutoScroll = true;
             this.panel3.AutoSize = true;
             this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel3.Location = new System.Drawing.Point(725, 298);
+            this.panel3.Location = new System.Drawing.Point(645, 298);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(0, 0);
             this.panel3.TabIndex = 13;
@@ -326,25 +360,10 @@
             this.panel8.AutoSize = true;
             this.panel8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel8.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel8.Location = new System.Drawing.Point(942, 0);
+            this.panel8.Location = new System.Drawing.Point(862, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(0, 433);
+            this.panel8.Size = new System.Drawing.Size(0, 858);
             this.panel8.TabIndex = 15;
-            // 
-            // groupBox_HDD
-            // 
-            this.groupBox_HDD.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox_HDD.AutoSize = true;
-            this.groupBox_HDD.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox_HDD.Location = new System.Drawing.Point(4, 850);
-            this.groupBox_HDD.Margin = new System.Windows.Forms.Padding(4);
-            this.groupBox_HDD.Name = "groupBox_HDD";
-            this.groupBox_HDD.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBox_HDD.Size = new System.Drawing.Size(8, 23);
-            this.groupBox_HDD.TabIndex = 4;
-            this.groupBox_HDD.TabStop = false;
-            this.groupBox_HDD.Text = "Жесткие диски";
             // 
             // vScrollBar1
             // 
@@ -352,35 +371,37 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.vScrollBar1.Location = new System.Drawing.Point(334, 4);
             this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(21, 429);
+            this.vScrollBar1.Size = new System.Drawing.Size(21, 854);
             this.vScrollBar1.TabIndex = 16;
             this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll_1);
             // 
-            // chart1
+            // chart_BIG
             // 
-            this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.chart_BIG.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             chartArea5.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea5);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(380, 13);
-            this.chart1.Name = "chart1";
+            this.chart_BIG.ChartAreas.Add(chartArea5);
+            this.chart_BIG.Location = new System.Drawing.Point(380, 13);
+            this.chart_BIG.Margin = new System.Windows.Forms.Padding(4);
+            this.chart_BIG.Name = "chart_BIG";
+            series5.BackSecondaryColor = System.Drawing.Color.Cyan;
             series5.ChartArea = "ChartArea1";
-            series5.Legend = "Legend1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            series5.LabelForeColor = System.Drawing.Color.IndianRed;
             series5.Name = "Series1";
-            this.chart1.Series.Add(series5);
-            this.chart1.Size = new System.Drawing.Size(550, 408);
-            this.chart1.TabIndex = 17;
-            this.chart1.Text = "chart1";
+            this.chart_BIG.Series.Add(series5);
+            this.chart_BIG.Size = new System.Drawing.Size(469, 832);
+            this.chart_BIG.TabIndex = 17;
+            this.chart_BIG.Text = "chart_BIG";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(942, 433);
-            this.Controls.Add(this.chart1);
+            this.ClientSize = new System.Drawing.Size(862, 858);
+            this.Controls.Add(this.chart_BIG);
             this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.panel8);
             this.Controls.Add(this.panel3);
@@ -410,7 +431,7 @@
             this.panel10.ResumeLayout(false);
             this.panel10.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart_RAM)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart_BIG)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -439,7 +460,7 @@
         private System.Windows.Forms.Label label_RAM_Info;
         private System.Windows.Forms.GroupBox groupBox_HDD;
         private System.Windows.Forms.VScrollBar vScrollBar1;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart_BIG;
     }
 }
 

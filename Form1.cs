@@ -11,6 +11,7 @@ using System.Management;
 using HardwareProviders.CPU;
 using HardwareProviders.HDD;
 using System.IO;
+using System.Reflection;
 
 namespace WindowsFormsApp1
 {
@@ -31,10 +32,13 @@ namespace WindowsFormsApp1
         public static Cpu CPU;
         public static DriveInfo[] HDDS;
         public static System.Windows.Forms.DataVisualization.Charting.Chart[] HDDCharts;
+        private System.Windows.Forms.DataVisualization.Charting.Chart _prevChart;
+        private Color _prevColor;
+        private Panel _prevPanel;
         private QueueLimited<double> _cpuTemperature;
         private QueueLimited<double> _cpuPower;
         private QueueLimited<double> _cpuRate;
-
+        private QueueLimited<double> _bigChart;
         private QueueLimited<double>[] HDDQueues;
 
         private QueueLimited<double> _RAMAllocated;
@@ -56,6 +60,7 @@ namespace WindowsFormsApp1
             HDDS = DriveInfo.GetDrives();
             SetLabels();
             SetCharts();
+            ChangeBigChart(chart_CPU_Power, new EventArgs());
         }
 
         private void SetLabels()
@@ -65,11 +70,10 @@ namespace WindowsFormsApp1
             _ramTotal = RAMParams.Total.MemoryGB;
             HDDQueues = new QueueLimited<double>[HDDS.Length];
             HDDCharts = new System.Windows.Forms.DataVisualization.Charting.Chart[HDDS.Length];
-            for (int i = 0; i < 10/*HDDS.Length*/; i++)
+            for (int i = 0; i < HDDS.Length; i++)
             {
-                
-                AddPanelToBox(ref groupBox_HDD, 0);
-                HDDQueues[0] = new QueueLimited<double>();
+                HDDQueues[i] = new QueueLimited<double>();
+                AddHDDPanelToBox(ref groupBox_HDD, i);
             }
             
 
@@ -82,12 +86,14 @@ namespace WindowsFormsApp1
             _cpuPower = new QueueLimited<double>();
             _cpuRate = new QueueLimited<double>();
             _RAMAllocated = new QueueLimited<double>();
+            _bigChart = new QueueLimited<double>();
             for (int i = 0; i < _cpuTemperature.Capacity; i++)
             {
                 _cpuTemperature.Add(0);
                 _cpuPower.Add(0);
                 _cpuRate.Add(0);
                 _RAMAllocated.Add(0);
+                _bigChart.Add(0);
                 for (int j = 0; j < HDDS.Length; j++)
                 {
                     HDDQueues[j].Add(0);
@@ -99,6 +105,8 @@ namespace WindowsFormsApp1
             chart_CPU_Temperature.ChartAreas[0].AxisY.Maximum = 120;
             chart_CPU_Temperature.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_CPU_Temperature.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+            chart_CPU_Temperature.Click += ChangeBigChart;
+            
 
             chart_CPU_Power.ChartAreas[0].AxisX.Minimum = 0;
             chart_CPU_Power.ChartAreas[0].AxisX.Maximum = _cpuPower.Capacity-1;
@@ -106,6 +114,8 @@ namespace WindowsFormsApp1
             chart_CPU_Power.ChartAreas[0].AxisY.Maximum = 100;
             chart_CPU_Power.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_CPU_Power.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+            chart_CPU_Power.Click += ChangeBigChart;
+            //_prevChart = chart_CPU_Power;
 
             chart_CPU_Rate.ChartAreas[0].AxisX.Minimum = 0;
             chart_CPU_Rate.ChartAreas[0].AxisX.Maximum = _cpuRate.Capacity-1;
@@ -113,6 +123,7 @@ namespace WindowsFormsApp1
             chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = CPUParams.Rate.MaxRate;
             chart_CPU_Rate.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_CPU_Rate.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+            chart_CPU_Rate.Click += ChangeBigChart;
 
             chart_RAM.ChartAreas[0].AxisX.Minimum = 0;
             chart_RAM.ChartAreas[0].AxisX.Maximum = _RAMAllocated.Capacity - 1;
@@ -120,9 +131,37 @@ namespace WindowsFormsApp1
             chart_RAM.ChartAreas[0].AxisY.Maximum = _ramTotal;
             chart_RAM.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_RAM.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+            chart_RAM.Click += ChangeBigChart;
+
+            chart_BIG.ChartAreas[0].AxisX.Minimum = 0;
+            chart_BIG.ChartAreas[0].AxisX.Maximum = _cpuTemperature.Capacity - 1;
+            chart_BIG.ChartAreas[0].AxisY.Minimum = 0;
+            chart_BIG.ChartAreas[0].AxisY.Maximum = 120;
+            chart_BIG.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chart_BIG.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+            chart_BIG.Series.Add("Series");
         }
 
-
+        private void ChangeBigChart(object sender, EventArgs e)
+        {
+            if (sender is System.Windows.Forms.DataVisualization.Charting.Chart chart)
+            {
+                if (_prevChart != chart)
+                {
+                    if (_prevChart != null)
+                    {
+                        _prevColor = chart.Parent.BackColor;
+                        _prevChart.Parent.BackColor = _prevColor;
+                    }
+                    chart.Parent.BackColor = System.Drawing.Color.Yellow;
+                    chart_BIG.ChartAreas[0].AxisX.Maximum = chart.ChartAreas[0].AxisX.Maximum;
+                    chart_BIG.ChartAreas[0].AxisY.Maximum = chart.ChartAreas[0].AxisY.Maximum;
+                    //chart_BIG = chart;
+                    
+                    _prevChart = chart;
+                }
+            }
+        }
 
         private void UpdateLabels()
         {
@@ -139,6 +178,17 @@ namespace WindowsFormsApp1
             UpdateChartCPUTemperature();
             UpdateChartCPUPower();
             UpdateChartCPURate();
+            UpdateBigChart();
+        }
+
+        private void UpdateBigChart()
+        {
+            chart_BIG.Series[0].Points.Clear();
+            for (int i = 0; i< _prevChart.Series[0].Points.Count; i++)
+            {
+                chart_BIG.Series[0].Points.AddXY(_prevChart.Series[0].Points[i].XValue, _prevChart.Series[0].Points[i].YValues[0]);
+            }
+            
         }
 
         private void UpdateChartCPUTemperature()
@@ -386,12 +436,7 @@ namespace WindowsFormsApp1
 
         }
 
-        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
-        {
-            
-        }
-
-        private void AddPanelToBox(ref GroupBox groupBox, int hardIndex)
+        private void AddHDDPanelToBox(ref GroupBox groupBox, int hardIndex)
         {
             
             Panel panel = new Panel();
@@ -399,11 +444,14 @@ namespace WindowsFormsApp1
             panel.AutoSize = true;
             panel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             panel.Location = new System.Drawing.Point(5, 22+indexOfPanel*185);
+            panel.MouseEnter+=panel10_MouseEnter;
+            panel.MouseLeave += panel10_MouseLeave;
             groupBox.Controls.Add(panel);
             
             Label label = new Label();
             label.Location = new System.Drawing.Point(5, 7);
             label.Text = "Диск " + HDDS[hardIndex].Name.Substring(0, HDDS[hardIndex].Name.Length-2) + " " + indexOfPanel.ToString();
+            label.MouseEnter += panel10_MouseEnter;
             panel.Controls.Add(label);
 
             HDDCharts[hardIndex] = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -411,15 +459,107 @@ namespace WindowsFormsApp1
             HDDCharts[hardIndex].Size = new System.Drawing.Size(296, 143);
             HDDCharts[hardIndex].Location = new System.Drawing.Point(8, 27);
             HDDCharts[hardIndex].Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            HDDCharts[hardIndex].ChartAreas.Add("Series1");
+            HDDCharts[hardIndex].ChartAreas[0] = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            HDDCharts[hardIndex].ChartAreas[0].AxisX.Minimum = 0;
+            HDDCharts[hardIndex].ChartAreas[0].AxisX.Maximum = HDDQueues[hardIndex].Capacity-1;
+            HDDCharts[hardIndex].ChartAreas[0].AxisY.Minimum = 0;
+            HDDCharts[hardIndex].ChartAreas[0].AxisY.Maximum = 100;
+            HDDCharts[hardIndex].ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            HDDCharts[hardIndex].ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+
+            HDDCharts[hardIndex].Click += ChangeBigChart;
+            HDDCharts[hardIndex].MouseEnter += panel10_MouseEnter;
             panel.Controls.Add(HDDCharts[hardIndex]);
 
+
+            /*
+             * chart_RAM.ChartAreas[0].AxisX.Minimum = 0;
+            chart_RAM.ChartAreas[0].AxisX.Maximum = _RAMAllocated.Capacity - 1;
+            chart_RAM.ChartAreas[0].AxisY.Minimum = 0;
+            chart_RAM.ChartAreas[0].AxisY.Maximum = _ramTotal;
+            chart_RAM.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
+            chart_RAM.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+             */
             indexOfPanel++;
             var t = panel1.Controls.Count;
         }
 
         private void vScrollBar1_Scroll_1(object sender, ScrollEventArgs e)
         {
-            panel1.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - (panel1.Height/125)*(e.NewValue-e.OldValue));
+            if (sender is ScrollBar)
+            {
+                panel1.Location = new System.Drawing.Point(panel1.Location.X, panel1.Location.Y - (panel1.Height / 125) * (e.NewValue - e.OldValue));
+            }
+            else
+            {
+                if (e.NewValue >= e.OldValue)
+                {
+                    if (vScrollBar1.Value < 100)
+                    {
+                        vScrollBar1.Value++;
+                    }
+                }
+                else
+                {
+                    if (vScrollBar1.Value > 0)
+                    {
+                        vScrollBar1.Value--;
+                    }
+                }
+                
+            }
+            
+        }
+
+        private void panel5_MouseHover(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void panel10_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel10_MouseEnter(object sender, EventArgs e)
+        {
+            if (sender is Panel pan)
+            {
+                if (pan != _prevPanel)
+                {
+                    if (_prevPanel != null)
+                    {
+                        _prevPanel.BorderStyle = BorderStyle.None;
+                    }
+                    pan.BorderStyle = BorderStyle.FixedSingle;
+                    _prevPanel = pan;
+                }
+
+            }
+            else if (sender is System.Windows.Forms.DataVisualization.Charting.Chart chart)
+            {
+                ((Panel)chart.Parent).BorderStyle = BorderStyle.FixedSingle;
+            }
+            else if (sender is Label lab)
+            {
+                ((Panel)lab.Parent).BorderStyle = BorderStyle.FixedSingle;
+            }
+
+        }
+
+        private void panel10_MouseLeave(object sender, EventArgs e)
+        {
+            if (sender is Panel pan)
+            {
+                if (_prevPanel != null)
+                {
+                    _prevPanel.BorderStyle = BorderStyle.None;
+                }
+                _prevPanel = null;
+            }
+            
+            
         }
     }
 
