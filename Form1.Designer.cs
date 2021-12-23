@@ -95,8 +95,6 @@
             this.chart_CPU_Temperature.TabIndex = 0;
             this.chart_CPU_Temperature.Text = "chart1";
             this.chart_CPU_Temperature.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
-            this.chart_CPU_Temperature.MouseLeave += new System.EventHandler(this.chart_CPU_Temperature_MouseLeave);
-            this.chart_CPU_Temperature.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart_CPU_Temperature_MouseMove);
             // 
             // chart_CPU_Power
             // 
@@ -118,10 +116,7 @@
             this.chart_CPU_Power.Size = new System.Drawing.Size(296, 143);
             this.chart_CPU_Power.TabIndex = 1;
             this.chart_CPU_Power.Text = "chart2";
-            this.chart_CPU_Power.Click += new System.EventHandler(this.chart_CPU_Power_Click);
             this.chart_CPU_Power.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
-            this.chart_CPU_Power.MouseLeave += new System.EventHandler(this.chart_CPU_Power_MouseLeave);
-            this.chart_CPU_Power.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart_CPU_Power_MouseMove);
             // 
             // chart_CPU_Rate
             // 
@@ -141,10 +136,7 @@
             this.chart_CPU_Rate.Size = new System.Drawing.Size(296, 143);
             this.chart_CPU_Rate.TabIndex = 2;
             this.chart_CPU_Rate.Text = "chart3";
-            this.chart_CPU_Rate.Click += new System.EventHandler(this.chart_CPU_Rate_Click_1);
             this.chart_CPU_Rate.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
-            this.chart_CPU_Rate.MouseLeave += new System.EventHandler(this.chart_CPU_Rate_MouseLeave);
-            this.chart_CPU_Rate.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart_CPU_Rate_MouseMove);
             // 
             // groupBox_CPU
             // 
@@ -174,7 +166,6 @@
             this.panel4.TabIndex = 14;
             this.panel4.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             this.panel4.MouseLeave += new System.EventHandler(this.panel10_MouseLeave);
-            this.panel4.MouseHover += new System.EventHandler(this.panel5_MouseHover);
             // 
             // label_CPU_temperature
             // 
@@ -200,7 +191,6 @@
             this.panel5.TabIndex = 15;
             this.panel5.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             this.panel5.MouseLeave += new System.EventHandler(this.panel10_MouseLeave);
-            this.panel5.MouseHover += new System.EventHandler(this.panel5_MouseHover);
             // 
             // label_CPU_Power
             // 
@@ -225,7 +215,6 @@
             this.panel6.TabIndex = 16;
             this.panel6.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             this.panel6.MouseLeave += new System.EventHandler(this.panel10_MouseLeave);
-            this.panel6.MouseHover += new System.EventHandler(this.panel5_MouseHover);
             // 
             // label_CPU_Rate
             // 
@@ -295,10 +284,8 @@
             this.panel10.Name = "panel10";
             this.panel10.Size = new System.Drawing.Size(312, 179);
             this.panel10.TabIndex = 17;
-            this.panel10.Paint += new System.Windows.Forms.PaintEventHandler(this.panel10_Paint);
             this.panel10.MouseEnter += new System.EventHandler(this.panel10_MouseEnter);
             this.panel10.MouseLeave += new System.EventHandler(this.panel10_MouseLeave);
-            this.panel10.MouseHover += new System.EventHandler(this.panel5_MouseHover);
             // 
             // chart_RAM
             // 
@@ -362,7 +349,7 @@
             this.panel8.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel8.Location = new System.Drawing.Point(862, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(0, 858);
+            this.panel8.Size = new System.Drawing.Size(0, 433);
             this.panel8.TabIndex = 15;
             // 
             // vScrollBar1
@@ -371,7 +358,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.vScrollBar1.Location = new System.Drawing.Point(334, 4);
             this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(21, 854);
+            this.vScrollBar1.Size = new System.Drawing.Size(21, 429);
             this.vScrollBar1.TabIndex = 16;
             this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll_1);
             // 
@@ -392,7 +379,7 @@
             series5.LabelForeColor = System.Drawing.Color.IndianRed;
             series5.Name = "Series1";
             this.chart_BIG.Series.Add(series5);
-            this.chart_BIG.Size = new System.Drawing.Size(469, 832);
+            this.chart_BIG.Size = new System.Drawing.Size(469, 407);
             this.chart_BIG.TabIndex = 17;
             this.chart_BIG.Text = "chart_BIG";
             // 
@@ -400,7 +387,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(862, 858);
+            this.ClientSize = new System.Drawing.Size(862, 433);
             this.Controls.Add(this.chart_BIG);
             this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.panel8);
@@ -412,7 +399,6 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Temperature)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Power)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Rate)).EndInit();

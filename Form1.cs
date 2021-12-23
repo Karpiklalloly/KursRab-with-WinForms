@@ -55,7 +55,9 @@ namespace WindowsFormsApp1
 
         public Form1()
         {
+            
             InitializeComponent();
+            
             CPU = Cpu.Discover()[0];
             HDDS = DriveInfo.GetDrives();
             SetLabels();
@@ -115,7 +117,6 @@ namespace WindowsFormsApp1
             chart_CPU_Power.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_CPU_Power.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
             chart_CPU_Power.Click += ChangeBigChart;
-            //_prevChart = chart_CPU_Power;
 
             chart_CPU_Rate.ChartAreas[0].AxisX.Minimum = 0;
             chart_CPU_Rate.ChartAreas[0].AxisX.Maximum = _cpuRate.Capacity-1;
@@ -178,6 +179,7 @@ namespace WindowsFormsApp1
             UpdateChartCPUTemperature();
             UpdateChartCPUPower();
             UpdateChartCPURate();
+            UpdateHDDCharts();
             UpdateBigChart();
         }
 
@@ -252,6 +254,25 @@ namespace WindowsFormsApp1
             //label_test_info2.Text = allocated.ToString("0.00");
         }
 
+        private void UpdateHDDCharts(bool drawChart = true)
+        {
+            int t = 0;
+            for (int i = 0; i < HDDS.Length; i++)
+            {
+                HDDQueues[i].Add(ConvertBytesIntoMBytes(HDDS[i].TotalSize) - ConvertBytesIntoMBytes(HDDS[i].TotalFreeSpace));
+                if (drawChart)
+                {
+                    HDDCharts[i].Series[0].Points.Clear();
+                    t = 0;
+                    foreach (var item in HDDQueues[i])
+                    {
+                        HDDCharts[i].Series[0].Points.AddXY(t, item);
+                        t++;
+                    }
+                }
+            }
+        }
+
         private void UpdateData()
         {
             CPU.Update();
@@ -292,18 +313,11 @@ namespace WindowsFormsApp1
         }
 
 
-        private void chart2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
         private void timer_Update_Tick(object sender, EventArgs e)
         {
             UpdateData();
             UpdateCharts();
             UpdateLabels();
-
         }
 
         public static double ConvertBytesIntoGBytes(string num)
@@ -311,129 +325,19 @@ namespace WindowsFormsApp1
             return ConvertBytesIntoGBytes(Convert.ToDouble(num));
         }
 
+        public static double ConvertBytesIntoMBytes(double num)
+        {
+            return Math.Round(num / (1024), 2);
+        }
+
+        public static double ConvertBytesIntoMBytes(string num)
+        {
+            return ConvertBytesIntoGBytes(Convert.ToDouble(num));
+        }
+
         public static double ConvertBytesIntoGBytes(double num)
         {
             return Math.Round(num / (1024 * 1024), 2);
-        }
-
-        private void chart_CPU_Rate_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void chart_CPU_Temperature_MouseMove(object sender, MouseEventArgs e)
-        {
-            int x = (int)Math.Round(chart_CPU_Temperature.ChartAreas[0].AxisX.PixelPositionToValue(e.X));
-            if (x < chart_CPU_Temperature.ChartAreas[0].AxisX.Minimum || x > chart_CPU_Temperature.ChartAreas[0].AxisX.Maximum)
-            {
-                return;
-            }
-
-            if (!_toolTipFOrCharts.Active)
-            {
-                _toolTipFOrCharts.Active = true;
-                _toolTipFOrCharts.SetToolTip(this.chart_CPU_Temperature, chart_CPU_Temperature.Series[0].Points[x].YValues[0].ToString("0.00"));
-            }
-        }
-
-        private void chart_CPU_Temperature_MouseHover(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void chart_CPU_Temperature_MouseLeave(object sender, EventArgs e)
-        {
-            _toolTipFOrCharts.Active = false;
-        }
-
-        private void chart_CPU_Power_MouseLeave(object sender, EventArgs e)
-        {
-            _toolTipFOrCharts.Active = false;
-        }
-
-        private void chart_CPU_Power_MouseMove(object sender, MouseEventArgs e)
-        {
-            int x = (int)Math.Round(chart_CPU_Power.ChartAreas[0].AxisX.PixelPositionToValue(e.X));
-            if (x < chart_CPU_Power.ChartAreas[0].AxisX.Minimum || x > chart_CPU_Power.ChartAreas[0].AxisX.Maximum)
-            {
-                return;
-            }
-
-            if (!_toolTipFOrCharts.Active)
-            {
-                _toolTipFOrCharts.Active = true;
-                _toolTipFOrCharts.SetToolTip(this.chart_CPU_Power, chart_CPU_Power.Series[0].Points[x].YValues[0].ToString("0.00"));
-            }
-        }
-
-        private void chart_CPU_Rate_MouseLeave(object sender, EventArgs e)
-        {
-            _toolTipFOrCharts.Active = false;
-        }
-
-        private void chart_CPU_Rate_MouseMove(object sender, MouseEventArgs e)
-        {
-            int x = (int)Math.Round(chart_CPU_Rate.ChartAreas[0].AxisX.PixelPositionToValue(e.X));
-            if (x < chart_CPU_Rate.ChartAreas[0].AxisX.Minimum || x > chart_CPU_Rate.ChartAreas[0].AxisX.Maximum)
-            {
-                return;
-            }
-
-            if (!_toolTipFOrCharts.Active)
-            {
-                _toolTipFOrCharts.Active = true;
-                _toolTipFOrCharts.SetToolTip(this.chart_CPU_Rate, chart_CPU_Rate.Series[0].Points[x].YValues[0].ToString("0.00"));
-            }
-        }
-
-        private void chart_RAM_MouseLeave(object sender, EventArgs e)
-        {
-            _toolTipFOrCharts.Active = false;
-        }
-
-        private void chart_RAM_MouseMove(object sender, MouseEventArgs e)
-        {
-            int x = (int)Math.Round(chart_RAM.ChartAreas[0].AxisX.PixelPositionToValue(e.X));
-            if (x < chart_RAM.ChartAreas[0].AxisX.Minimum || x > chart_RAM.ChartAreas[0].AxisX.Maximum)
-            {
-                return;
-            }
-
-            if (!_toolTipFOrCharts.Active)
-            {
-                _toolTipFOrCharts.Active = true;
-                _toolTipFOrCharts.SetToolTip(this.chart_RAM, chart_RAM.Series[0].Points[x].YValues[0].ToString("0.00"));
-            }
-        }
-
-        private void label_RAM_Info_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void chart_CPU_Power_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void chart_CPU_Rate_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void panel7_Paint(object sender, PaintEventArgs e)
-        {
-
         }
 
         private void AddHDDPanelToBox(ref GroupBox groupBox, int hardIndex)
@@ -450,7 +354,7 @@ namespace WindowsFormsApp1
             
             Label label = new Label();
             label.Location = new System.Drawing.Point(5, 7);
-            label.Text = "Диск " + HDDS[hardIndex].Name.Substring(0, HDDS[hardIndex].Name.Length-2) + " " + indexOfPanel.ToString();
+            label.Text = "Диск " + HDDS[hardIndex].Name.Substring(0, HDDS[hardIndex].Name.Length-2);
             label.MouseEnter += panel10_MouseEnter;
             panel.Controls.Add(label);
 
@@ -464,9 +368,12 @@ namespace WindowsFormsApp1
             HDDCharts[hardIndex].ChartAreas[0].AxisX.Minimum = 0;
             HDDCharts[hardIndex].ChartAreas[0].AxisX.Maximum = HDDQueues[hardIndex].Capacity-1;
             HDDCharts[hardIndex].ChartAreas[0].AxisY.Minimum = 0;
-            HDDCharts[hardIndex].ChartAreas[0].AxisY.Maximum = 100;
+            HDDCharts[hardIndex].ChartAreas[0].AxisY.Maximum = ConvertBytesIntoMBytes(HDDS[hardIndex].TotalSize);
             HDDCharts[hardIndex].ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             HDDCharts[hardIndex].ChartAreas[0].AxisY.LabelStyle.Enabled = false;
+            HDDCharts[hardIndex].Series.Add("Series1");
+            HDDCharts[hardIndex].Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            HDDCharts[hardIndex].Series[0].Color = System.Drawing.Color.Green;
 
             HDDCharts[hardIndex].Click += ChangeBigChart;
             HDDCharts[hardIndex].MouseEnter += panel10_MouseEnter;
@@ -512,16 +419,6 @@ namespace WindowsFormsApp1
             
         }
 
-        private void panel5_MouseHover(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void panel10_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void panel10_MouseEnter(object sender, EventArgs e)
         {
             if (sender is Panel pan)
@@ -558,8 +455,6 @@ namespace WindowsFormsApp1
                 }
                 _prevPanel = null;
             }
-            
-            
         }
     }
 
