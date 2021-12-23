@@ -456,6 +456,16 @@ namespace WindowsFormsApp1
                 _prevPanel = null;
             }
         }
+
+        private void tabPage1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chart_BIG_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 

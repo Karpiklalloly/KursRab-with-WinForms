@@ -61,6 +61,9 @@
             this.panel8 = new System.Windows.Forms.Panel();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.chart_BIG = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Temperature)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Power)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_CPU_Rate)).BeginInit();
@@ -73,6 +76,8 @@
             this.panel10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart_RAM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_BIG)).BeginInit();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // chart_CPU_Temperature
@@ -241,7 +246,7 @@
             this.panel1.Controls.Add(this.groupBox_HDD);
             this.panel1.Controls.Add(this.groupBox_CPU);
             this.panel1.Controls.Add(this.groupBox_RAM);
-            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Location = new System.Drawing.Point(6, 6);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(332, 861);
             this.panel1.TabIndex = 11;
@@ -325,7 +330,7 @@
             this.panel2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.panel2.AutoSize = true;
             this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel2.Location = new System.Drawing.Point(-89, 15);
+            this.panel2.Location = new System.Drawing.Point(-69, 15);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(0, 0);
             this.panel2.TabIndex = 12;
@@ -336,7 +341,7 @@
             this.panel3.AutoScroll = true;
             this.panel3.AutoSize = true;
             this.panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel3.Location = new System.Drawing.Point(645, 298);
+            this.panel3.Location = new System.Drawing.Point(685, 298);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(0, 0);
             this.panel3.TabIndex = 13;
@@ -347,7 +352,7 @@
             this.panel8.AutoSize = true;
             this.panel8.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel8.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel8.Location = new System.Drawing.Point(862, 0);
+            this.panel8.Location = new System.Drawing.Point(902, 0);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(0, 433);
             this.panel8.TabIndex = 15;
@@ -356,9 +361,9 @@
             // 
             this.vScrollBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.vScrollBar1.Location = new System.Drawing.Point(334, 4);
+            this.vScrollBar1.Location = new System.Drawing.Point(341, 0);
             this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(21, 429);
+            this.vScrollBar1.Size = new System.Drawing.Size(21, 400);
             this.vScrollBar1.TabIndex = 16;
             this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll_1);
             // 
@@ -369,7 +374,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             chartArea5.Name = "ChartArea1";
             this.chart_BIG.ChartAreas.Add(chartArea5);
-            this.chart_BIG.Location = new System.Drawing.Point(380, 13);
+            this.chart_BIG.Location = new System.Drawing.Point(393, 11);
             this.chart_BIG.Margin = new System.Windows.Forms.Padding(4);
             this.chart_BIG.Name = "chart_BIG";
             series5.BackSecondaryColor = System.Drawing.Color.Cyan;
@@ -379,21 +384,57 @@
             series5.LabelForeColor = System.Drawing.Color.IndianRed;
             series5.Name = "Series1";
             this.chart_BIG.Series.Add(series5);
-            this.chart_BIG.Size = new System.Drawing.Size(469, 407);
+            this.chart_BIG.Size = new System.Drawing.Size(440, 389);
             this.chart_BIG.TabIndex = 17;
             this.chart_BIG.Text = "chart_BIG";
+            this.chart_BIG.Click += new System.EventHandler(this.chart_BIG_Click);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(12, 4);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(878, 429);
+            this.tabControl1.TabIndex = 5;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.panel1);
+            this.tabPage1.Controls.Add(this.chart_BIG);
+            this.tabPage1.Controls.Add(this.vScrollBar1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 25);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(870, 400);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(870, 400);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(862, 433);
-            this.Controls.Add(this.chart_BIG);
-            this.Controls.Add(this.vScrollBar1);
+            this.ClientSize = new System.Drawing.Size(902, 433);
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panel8);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(640, 480);
             this.Name = "Form1";
@@ -418,6 +459,9 @@
             this.panel10.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart_RAM)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart_BIG)).EndInit();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -447,6 +491,9 @@
         private System.Windows.Forms.GroupBox groupBox_HDD;
         private System.Windows.Forms.VScrollBar vScrollBar1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart_BIG;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
     }
 }
 
