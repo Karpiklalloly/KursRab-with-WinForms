@@ -11,7 +11,9 @@ using System.Management;
 using HardwareProviders.CPU;
 using HardwareProviders.HDD;
 using System.IO;
-using System.Reflection;
+using DirectShowLib;
+using System.Windows.Input;
+using System.Net.NetworkInformation;
 
 namespace WindowsFormsApp1
 {
@@ -30,6 +32,7 @@ namespace WindowsFormsApp1
         private double _cpuCurRate;
 
         public static Cpu CPU;
+        public static Cpu[] CPUS;
         public static DriveInfo[] HDDS;
         public static System.Windows.Forms.DataVisualization.Charting.Chart[] HDDCharts;
         private System.Windows.Forms.DataVisualization.Charting.Chart _prevChart;
@@ -58,11 +61,103 @@ namespace WindowsFormsApp1
             
             InitializeComponent();
             
-            CPU = Cpu.Discover()[0];
+            CPUS = Cpu.Discover();
+            CPU = CPUS[0];
             HDDS = DriveInfo.GetDrives();
             SetLabels();
             SetCharts();
             ChangeBigChart(chart_CPU_Power, new EventArgs());
+            SetDeviceTree();
+        }
+
+        private void SetDeviceTree()
+        {
+            treeView1.Nodes[0].Text = Environment.MachineName;
+            
+            int index = 0;
+            int secondIndex = 0;
+
+            //TODO: Сделать поиск Bluetooth
+
+            AddNodeToTree(ref treeView1, ref index, "Звуковые, игровые и видеоустройства", "Win32_SoundDevice", "Name");
+
+            //Выводит Primary, надо исправить
+            AddNodeToTree(ref treeView1, ref index, "Батарея", "Win32_Battery", "Name");
+
+            AddNodeToTree(ref treeView1, ref index, "Видеоадаптеры", "Win32_VideoController", "Description");
+
+            AddNodeToTree(ref treeView1, ref index, "Дисковые устройства", "Win32_DiskDrive", "Model");
+
+            DsDevice[] captureDevices;
+            captureDevices = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice);
+            List<string> names = new List<string>();
+            for (int idx = 0; idx < captureDevices.Length; idx++)
+            {
+                names.Add(captureDevices[idx].Name);
+            }
+            AddNodeToTree(ref treeView1, ref index, "Камеры", names);
+
+            captureDevices = DsDevice.GetDevicesOfCat(FilterCategory.AudioInputDevice);
+            names = new List<string>();
+            for (int idx = 0; idx < captureDevices.Length; idx++)
+            {
+                names.Add(captureDevices[idx].Name);
+            }
+            AddNodeToTree(ref treeView1, ref index, "Устройства ввода", names);
+
+            AddNodeToTree(ref treeView1, ref index, "USB" , "Win32_USBHub", "Name");
+
+            AddNodeToTree(ref treeView1, ref index, "Мониторы", "Win32_DesktopMonitor", "Description");
+
+            AddNodeToTree(ref treeView1, ref index, "Мыши и иные указывающие устройства", "Win32_PointingDevice", "Name");
+
+            names = new List<string>();
+            for (int i = 0; i < CPUS.Length; i++)
+            {
+                names.Add(CPUS[i].Name);
+            }
+            AddNodeToTree(ref treeView1, ref index, "Процессоры", names);
+
+            names = new List<string>();
+            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                names.Add(nic.Description);
+            }
+            AddNodeToTree(ref treeView1, ref index, "Сетевые адапторы", names);
+            treeView1.Nodes[0].Expand();
+        }
+
+        private void AddNodeToTree(ref TreeView tree, ref int index, string title, string WIN32_Class, string ClassItemField)
+        {
+            int secondIndex = 0;
+            var names = GetHardwareInfo(WIN32_Class, ClassItemField);
+            if (names.Count != 0)
+            {
+                treeView1.Nodes[0].Nodes.Add(new TreeNode());
+                treeView1.Nodes[0].Nodes[index].Text = title;
+                foreach (var item in names)
+                {
+                    treeView1.Nodes[0].Nodes[index].Nodes.Add(new TreeNode());
+                    treeView1.Nodes[0].Nodes[index].Nodes[secondIndex++].Text = item;
+                }
+                index++;
+            }
+        }
+
+        private void AddNodeToTree(ref TreeView tree, ref int index, string title, List<string> names)
+        {
+            int secondIndex = 0;
+            if (names.Count != 0)
+            {
+                treeView1.Nodes[0].Nodes.Add(new TreeNode());
+                treeView1.Nodes[0].Nodes[index].Text = title;
+                foreach (var item in names)
+                {
+                    treeView1.Nodes[0].Nodes[index].Nodes.Add(new TreeNode());
+                    treeView1.Nodes[0].Nodes[index].Nodes[secondIndex++].Text = item;
+                }
+                index++;
+            }
         }
 
         private void SetLabels()
@@ -283,7 +378,6 @@ namespace WindowsFormsApp1
             _cpuCurPower = CPUParams.Power.CurPower;
         }
 
-
         public static List<string> GetHardwareInfo(string WIN32_Class, string ClassItemField, bool isFromRoot = false)
         {
             List<string> result = new List<string>();
@@ -311,7 +405,6 @@ namespace WindowsFormsApp1
 
             return result;
         }
-
 
         private void timer_Update_Tick(object sender, EventArgs e)
         {
@@ -374,6 +467,11 @@ namespace WindowsFormsApp1
             HDDCharts[hardIndex].Series.Add("Series1");
             HDDCharts[hardIndex].Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             HDDCharts[hardIndex].Series[0].Color = System.Drawing.Color.Green;
+
+            for (int i = 0; i < HDDQueues[hardIndex].Capacity; i++)
+            {
+                HDDQueues[hardIndex].Add(0);
+            }
 
             HDDCharts[hardIndex].Click += ChangeBigChart;
             HDDCharts[hardIndex].MouseEnter += panel10_MouseEnter;
@@ -456,17 +554,5 @@ namespace WindowsFormsApp1
                 _prevPanel = null;
             }
         }
-
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void chart_BIG_Click(object sender, EventArgs e)
-        {
-
-        }
     }
-
-
 }
