@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
+/// <summary>
+/// Параметры ОЗУ
+/// </summary>
 namespace WindowsFormsApp1.RAMParams
 {
+    /// <summary>
+    /// Занятая память
+    /// </summary>
     public class Allocated
     {
         public static double MemoryGB
@@ -25,6 +27,9 @@ namespace WindowsFormsApp1.RAMParams
         }
     }
 
+    /// <summary>
+    /// Свободная память
+    /// </summary>
     public class Free
     {
         public static double MemoryGB
@@ -44,6 +49,9 @@ namespace WindowsFormsApp1.RAMParams
         }
     }
 
+    /// <summary>
+    /// Общая видимая память
+    /// </summary>
     public class Total
     {
         private static double _memoryGB = -1;

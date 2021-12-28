@@ -1,8 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
 
+/// <summary>
+/// Параметры процессора
+/// </summary>
 namespace WindowsFormsApp1.CPUParams
 {
+    /// <summary>
+    /// Температура
+    /// </summary>
     public class Temperature
     {
         public static double CurTemperature
@@ -15,6 +20,9 @@ namespace WindowsFormsApp1.CPUParams
         }
     }
 
+    /// <summary>
+    /// Частота
+    /// </summary>
     public class Rate
     {
         private static readonly double _maxRate = (double)Form1.CPU.CoreClocks[0].Max;
@@ -35,6 +43,9 @@ namespace WindowsFormsApp1.CPUParams
         }
     }
 
+    /// <summary>
+    /// Нагрузка
+    /// </summary>
     public class Power
     {
         private static double _sum;
