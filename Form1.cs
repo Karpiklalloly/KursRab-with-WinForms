@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Management;
-using DirectShowLib;
 using System.Net.NetworkInformation;
 
 
@@ -63,21 +62,8 @@ namespace WindowsFormsApp1
 
             AddNodeToTree(ref treeView1, ref index, "Дисковые устройства", "Win32_DiskDrive", "Model");
 
-            DsDevice[] captureDevices;
-            captureDevices = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice);
             List<string> names = new List<string>();
-            for (int idx = 0; idx < captureDevices.Length; idx++)
-            {
-                names.Add(captureDevices[idx].Name);
-            }
-            AddNodeToTree(ref treeView1, ref index, "Камеры", names);
 
-            captureDevices = DsDevice.GetDevicesOfCat(FilterCategory.AudioInputDevice);
-            names = new List<string>();
-            for (int idx = 0; idx < captureDevices.Length; idx++)
-            {
-                names.Add(captureDevices[idx].Name);
-            }
             AddNodeToTree(ref treeView1, ref index, "Устройства ввода", names);
 
             AddNodeToTree(ref treeView1, ref index, "USB" , "Win32_USBHub", "Name");
@@ -394,18 +380,11 @@ namespace WindowsFormsApp1
         /// <param name="ClassItemField">Параметр класса</param>
         /// <param name="isFromRoot"></param>
         /// <returns></returns>
-        public static List<string> GetHardwareInfo(string WIN32_Class, string ClassItemField, bool isFromRoot = false)
+        public static List<string> GetHardwareInfo(string WIN32_Class, string ClassItemField)
         {
             List<string> result = new List<string>();
             ManagementObjectSearcher searcher;
-            if (isFromRoot)
-            {
-                searcher = new ManagementObjectSearcher(@"root\WMI", "SELECT * FROM " + WIN32_Class);
-            }
-            else
-            {
-                searcher = new ManagementObjectSearcher("SELECT * FROM " + WIN32_Class);
-            }
+            searcher = new ManagementObjectSearcher("SELECT * FROM " + WIN32_Class);
 
             try
             {

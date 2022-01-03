@@ -72,9 +72,6 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DirectShowLib-2005">
-      <HintPath>.\DirectShowLib-2005.dll</HintPath>
-    </Reference>
     <Reference Include="OpenHardwareMonitorLib, Version=0.9.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\OpenHardwareMonitor.0.9.6\lib\net45\OpenHardwareMonitorLib.dll</HintPath>
     </Reference>
