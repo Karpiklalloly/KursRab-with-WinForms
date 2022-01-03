@@ -365,7 +365,7 @@
             // 
             this.vScrollBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.vScrollBar1.Location = new System.Drawing.Point(368, 0);
+            this.vScrollBar1.Location = new System.Drawing.Point(352, 4);
             this.vScrollBar1.Name = "vScrollBar1";
             this.vScrollBar1.Size = new System.Drawing.Size(21, 400);
             this.vScrollBar1.TabIndex = 16;
@@ -378,7 +378,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             chartArea5.Name = "ChartArea1";
             this.chart_BIG.ChartAreas.Add(chartArea5);
-            this.chart_BIG.Location = new System.Drawing.Point(393, 11);
+            this.chart_BIG.Location = new System.Drawing.Point(395, 11);
             this.chart_BIG.Margin = new System.Windows.Forms.Padding(4);
             this.chart_BIG.Name = "chart_BIG";
             series5.BackSecondaryColor = System.Drawing.Color.Cyan;
@@ -388,7 +388,7 @@
             series5.LabelForeColor = System.Drawing.Color.IndianRed;
             series5.Name = "Series1";
             this.chart_BIG.Series.Add(series5);
-            this.chart_BIG.Size = new System.Drawing.Size(440, 389);
+            this.chart_BIG.Size = new System.Drawing.Size(468, 389);
             this.chart_BIG.TabIndex = 17;
             this.chart_BIG.Text = "chart_BIG";
             // 

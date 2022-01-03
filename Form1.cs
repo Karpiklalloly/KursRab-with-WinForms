@@ -3,27 +3,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Management;
-using HardwareProviders.CPU;
 using DirectShowLib;
 using System.Net.NetworkInformation;
+
 
 namespace WindowsFormsApp1
 {
 
     public partial class Form1 : Form
     {
-        private string _cpuName;
-        
-        private double _ramTotal;
-        private double _ramFree;
-        private double _ramAllocated;
-
-        private double _cpuCurTemperature;
-        private double _cpuCurPower;
-        private double _cpuCurRate;
-
-        public static Cpu CPU;
-        public static Cpu[] CPUS;
         public static System.Windows.Forms.DataVisualization.Charting.Chart[] HDDCharts;
 
         /// <summary>
@@ -47,14 +35,13 @@ namespace WindowsFormsApp1
 
         public Form1()
         {
-            
             InitializeComponent();
-            
-            CPUS = Cpu.Discover();
-            CPU = CPUS[0];
+            PCParams.PC.Init();
+            PCParams.CPU.Init();
+            PCParams.HDD.Init();
+            PCParams.RAM.Init();
             SetLabels();
             SetCharts();
-            
             SetDeviceTree();
         }
 
@@ -99,12 +86,11 @@ namespace WindowsFormsApp1
 
             AddNodeToTree(ref treeView1, ref index, "Мыши и иные указывающие устройства", "Win32_PointingDevice", "Name");
 
-            names = new List<string>();
-            for (int i = 0; i < CPUS.Length; i++)
+            names = new List<string>
             {
-                names.Add(CPUS[i].Name);
-            }
-            AddNodeToTree(ref treeView1, ref index, "Процессоры", names);
+                PCParams.CPU.Name
+            };
+            AddNodeToTree(ref treeView1, ref index, "Процессор", names);
 
             names = new List<string>();
             foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
@@ -168,12 +154,10 @@ namespace WindowsFormsApp1
         /// </summary>
         private void SetLabels()
         {
-            _cpuName = Cpu.Discover()[0].Name;
-            groupBox_CPU.Text = _cpuName;
-            _ramTotal = RAMParams.Total.MemoryGB;
-            HDDQueues = new QueueLimited<double>[HDDParams.Info.Count];
-            HDDCharts = new System.Windows.Forms.DataVisualization.Charting.Chart[HDDParams.Info.Count];
-            for (int i = 0; i < HDDParams.Info.Count; i++)
+            groupBox_CPU.Text = PCParams.CPU.Name;
+            HDDQueues = new QueueLimited<double>[PCParams.HDD.Count];
+            HDDCharts = new System.Windows.Forms.DataVisualization.Charting.Chart[PCParams.HDD.Count];
+            for (int i = 0; i < PCParams.HDD.Count; i++)
             {
                 HDDQueues[i] = new QueueLimited<double>();
                 AddHDDPanelToBox(ref groupBox_HDD, i);
@@ -198,7 +182,7 @@ namespace WindowsFormsApp1
                 _cpuRate.Add(0);
                 _RAMAllocated.Add(0);
                 _bigChart.Add(0);
-                for (int j = 0; j < HDDParams.Info.Count; j++)
+                for (int j = 0; j < PCParams.HDD.Count; j++)
                 {
                     HDDQueues[j].Add(0);
                 }
@@ -223,7 +207,7 @@ namespace WindowsFormsApp1
             chart_CPU_Rate.ChartAreas[0].AxisX.Minimum = 0;
             chart_CPU_Rate.ChartAreas[0].AxisX.Maximum = _cpuRate.Capacity-1;
             chart_CPU_Rate.ChartAreas[0].AxisY.Minimum = 0;
-            chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = CPUParams.Rate.MaxRate;
+            chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = PCParams.CPU.MaxRate;
             chart_CPU_Rate.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_CPU_Rate.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
             chart_CPU_Rate.Click += ChangeBigChart;
@@ -231,7 +215,7 @@ namespace WindowsFormsApp1
             chart_RAM.ChartAreas[0].AxisX.Minimum = 0;
             chart_RAM.ChartAreas[0].AxisX.Maximum = _RAMAllocated.Capacity - 1;
             chart_RAM.ChartAreas[0].AxisY.Minimum = 0;
-            chart_RAM.ChartAreas[0].AxisY.Maximum = _ramTotal;
+            chart_RAM.ChartAreas[0].AxisY.Maximum = PCParams.RAM.Total;
             chart_RAM.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_RAM.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
             chart_RAM.Click += ChangeBigChart;
@@ -278,10 +262,10 @@ namespace WindowsFormsApp1
         private void UpdateLabels()
         {
            
-            label_RAM_Info.Text = "Занаято памяти " + _ramAllocated + "/" + _ramTotal + " ГБайт";
-            label_CPU_temperature.Text = "Температура, " + _cpuCurTemperature.ToString("0.00") + " °C";
-            label_CPU_Power.Text = "Нагрузка, " + _cpuCurPower.ToString("0.00") + " %";
-            label_CPU_Rate.Text = "Частота, " + _cpuCurRate.ToString("0.00") + " МГц";
+            label_RAM_Info.Text = "Занаято памяти " + PCParams.RAM.Allocated.ToString("0.00") + "/" + PCParams.RAM.Total.ToString("0.00") + " ГБайт";
+            label_CPU_temperature.Text = "Температура, " + PCParams.CPU.CurTemperature.ToString("0.00") + " °C";
+            label_CPU_Power.Text = "Нагрузка, " + PCParams.CPU.CurLoad.ToString("0.00") + " %";
+            label_CPU_Rate.Text = "Частота, " + PCParams.CPU.CurRate.ToString("0.00") + " МГц";
         }
 
         /// <summary>
@@ -316,7 +300,7 @@ namespace WindowsFormsApp1
         private void UpdateChartCPUTemperature()
         {
             
-            _cpuTemperature.Add(_cpuCurTemperature);
+            _cpuTemperature.Add(PCParams.CPU.CurTemperature);
             chart_CPU_Temperature.Series[0].Points.Clear();
             int i = 0;
             foreach (var item in _cpuTemperature)
@@ -331,7 +315,11 @@ namespace WindowsFormsApp1
         /// </summary>
         private void UpdateChartCPURate()
         {
-            _cpuRate.Add(_cpuCurRate);
+            _cpuRate.Add(PCParams.CPU.CurRate);
+            if (PCParams.CPU.CurRate > chart_CPU_Rate.ChartAreas[0].AxisY.Maximum)
+            {
+                chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = PCParams.CPU.CurRate;
+            }
             chart_CPU_Rate.Series[0].Points.Clear();
             int i = 0;
             foreach (var item in _cpuRate)
@@ -346,7 +334,7 @@ namespace WindowsFormsApp1
         /// </summary>
         private void UpdateChartCPUPower()
         {
-            _cpuPower.Add(_cpuCurPower);
+            _cpuPower.Add(PCParams.CPU.CurLoad);
             chart_CPU_Power.Series[0].Points.Clear();
             int i = 0;
             foreach (var item in _cpuPower)
@@ -361,7 +349,7 @@ namespace WindowsFormsApp1
         /// </summary>
         private void UpdateChartRAMAllocated()
         {
-            var allocated = RAMParams.Allocated.MemoryGB;
+            var allocated = PCParams.RAM.Allocated;
             _RAMAllocated.Add(allocated);
             chart_RAM.Series[0].Points.Clear();
             int i = 0;
@@ -378,9 +366,9 @@ namespace WindowsFormsApp1
         private void UpdateHDDCharts()
         {
             int t;
-            for (int i = 0; i < HDDParams.Info.Count; i++)
+            for (int i = 0; i < PCParams.HDD.Count; i++)
             {
-                HDDQueues[i].Add(ConvertBytesIntoMBytes(HDDParams.Info.GetDrive(i).TotalSize) - ConvertBytesIntoMBytes(HDDParams.Info.GetDrive(i).TotalFreeSpace));
+                HDDQueues[i].Add(PCParams.HDD.Usages[i]);
                 HDDCharts[i].Series[0].Points.Clear();
                 t = 0;
                 foreach (var item in HDDQueues[i])
@@ -396,12 +384,7 @@ namespace WindowsFormsApp1
         /// </summary>
         private void UpdateData()
         {
-            CPU.Update();
-            _ramFree = RAMParams.Free.MemoryGB;
-            _ramAllocated = _ramTotal - _ramFree;
-            _cpuCurTemperature = CPUParams.Temperature.CurTemperature;
-            _cpuCurRate = CPUParams.Rate.CurRate;
-            _cpuCurPower = CPUParams.Power.CurPower;
+            PCParams.PC.Update();
         }
 
         /// <summary>
@@ -452,58 +435,16 @@ namespace WindowsFormsApp1
         }
 
         /// <summary>
-        /// Преобразует Байты в ГБайты
-        /// </summary>
-        /// <param name="num">Число в виде строки</param>
-        /// <returns></returns>
-        public static double ConvertBytesIntoGBytes(string num)
-        {
-            return ConvertBytesIntoGBytes(Convert.ToDouble(num));
-        }
-
-        /// <summary>
-        /// Преобразует Байты в ГБайты
-        /// </summary>
-        /// <param name="num">Число для преобразования</param>
-        /// <returns></returns>
-        public static double ConvertBytesIntoGBytes(double num)
-        {
-            return Math.Round(num / (1024 * 1024), 2);
-        }
-
-        /// <summary>
-        /// Преобразует Байты в МБайты
-        /// </summary>
-        /// <param name="num">Число для преобразования</param>
-        /// <returns></returns>
-        public static double ConvertBytesIntoMBytes(double num)
-        {
-            return Math.Round(num / (1024), 2);
-        }
-
-        /// <summary>
-        /// Преобразует Байты в МБайты
-        /// </summary>
-        /// <param name="num">Число в виде строки</param>
-        /// <returns></returns>
-        public static double ConvertBytesIntoMBytes(string num)
-        {
-            return ConvertBytesIntoGBytes(Convert.ToDouble(num));
-        }
-
-        /// <summary>
         /// Добавляет панел, график и ярлык Жесткого диска по индексу. Жестко связан с HDDQueues
         /// </summary>
         /// <param name="groupBox">"Коробка, в которую добавляется новый график"</param>
         /// <param name="hardIndex">Индекс жесткого диска в HDDQueues</param>
         private void AddHDDPanelToBox(ref GroupBox groupBox, int hardIndex)
         {
-
             Panel panel = new Panel
             {
                 Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Size = panel5.Size,
                 Location = new System.Drawing.Point(5, 22 + indexOfPanel * 185)
             };
             panel.MouseEnter+=panel10_MouseEnter;
@@ -513,7 +454,7 @@ namespace WindowsFormsApp1
             Label label = new Label
             {
                 Location = new System.Drawing.Point(5, 7),
-                Text = "Диск " + HDDParams.Info.GetDrive(hardIndex).Name.Substring(0, HDDParams.Info.GetDrive(hardIndex).Name.Length - 2)
+                Text = "Диск " + PCParams.HDD.Names[hardIndex]
             };
             label.MouseEnter += panel10_MouseEnter;
             panel.Controls.Add(label);
@@ -521,7 +462,7 @@ namespace WindowsFormsApp1
             HDDCharts[hardIndex] = new System.Windows.Forms.DataVisualization.Charting.Chart
             {
                 Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom,
-                Size = new System.Drawing.Size(296, 143),
+                Size = new System.Drawing.Size(chart_CPU_Power.Size.Width, chart_CPU_Power.Size.Height),
                 Location = new System.Drawing.Point(8, 27),
                 Margin = new System.Windows.Forms.Padding(4, 4, 4, 4)
             };
@@ -530,7 +471,7 @@ namespace WindowsFormsApp1
             HDDCharts[hardIndex].ChartAreas[0].AxisX.Minimum = 0;
             HDDCharts[hardIndex].ChartAreas[0].AxisX.Maximum = HDDQueues[hardIndex].Capacity-1;
             HDDCharts[hardIndex].ChartAreas[0].AxisY.Minimum = 0;
-            HDDCharts[hardIndex].ChartAreas[0].AxisY.Maximum = ConvertBytesIntoMBytes(HDDParams.Info.GetDrive(hardIndex).TotalSize);
+            HDDCharts[hardIndex].ChartAreas[0].AxisY.Maximum = 100;
             HDDCharts[hardIndex].ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             HDDCharts[hardIndex].ChartAreas[0].AxisY.LabelStyle.Enabled = false;
             HDDCharts[hardIndex].Series.Add("Series1");
@@ -620,7 +561,7 @@ namespace WindowsFormsApp1
         /// <param name="e"></param>
         private void panel10_MouseLeave(object sender, EventArgs e)
         {
-            if (sender is Panel pan)
+            if (sender is Panel)
             {
                 if (_prevPanel != null)
                 {
