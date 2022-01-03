@@ -1,4 +1,7 @@
-﻿using System;
+﻿// This is a personal academic project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -73,14 +76,13 @@ namespace WindowsFormsApp1.PCParams
                 }
             }
 
-            bool rateSetted = false;
             foreach (var t in _hardware.Sensors)
             {
                 if (t.SensorType == SensorType.Temperature)
                 {
                     _temperature = t;
                 }
-                else if (t.SensorType == SensorType.Clock && !rateSetted)
+                else if (t.SensorType == SensorType.Clock)
                 {
                     _rate = t;
                 }
