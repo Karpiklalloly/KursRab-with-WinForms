@@ -12,8 +12,23 @@ namespace WindowsFormsApp1.PCParams
 {
     internal class PC
     {
-        private static Computer _computer;
-        public static Computer Computer
+        public static PC Instatnce
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new PC();
+                    _instance.Init();
+                }
+                    
+                return _instance;
+            }
+        }
+        private static PC _instance = null;
+
+        private Computer _computer;
+        public Computer Computer
         {
             get
             {
@@ -27,9 +42,7 @@ namespace WindowsFormsApp1.PCParams
             }
         }
 
-        public static bool Inited = false;
-
-        public static void Init(bool cpu = true, bool hdd = true, bool ram = true, bool gpu = false, bool fanControl = false, bool mainBoard = false)
+        private void Init(bool cpu = true, bool hdd = true, bool ram = true, bool gpu = false, bool fanControl = false, bool mainBoard = false)
         {
             Computer = new Computer();
             Computer.Open();
@@ -41,10 +54,9 @@ namespace WindowsFormsApp1.PCParams
             Computer.FanControllerEnabled = fanControl;
             Computer.MainboardEnabled = mainBoard;
             Computer.Accept(new UpdateVisitor());
-            Inited = true;
         }
 
-        public static void Update()
+        public void Update()
         {
             foreach (var t in Computer.Hardware)
             {
@@ -55,19 +67,32 @@ namespace WindowsFormsApp1.PCParams
 
     public class CPU
     {
-        public static bool Inited = false;
-
-        private static IHardware _hardware;
-        private static ISensor _temperature;
-        private static ISensor _rate = null;
-        private static ISensor _load;
-
-        public static string Name;
-
-
-        public static void Init()
+        public static CPU Instatnce
         {
-            foreach (var t in PC.Computer.Hardware)
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new CPU();
+                    _instance.Init();
+                }
+                    
+                return _instance;
+            }
+        }
+        private static CPU _instance = null;
+
+        private IHardware _hardware;
+        private ISensor _temperature;
+        private ISensor _rate = null;
+        private ISensor _load;
+
+        public string Name;
+
+
+        private void Init()
+        {
+            foreach (var t in PC.Instatnce.Computer.Hardware)
             {
                 if (t.HardwareType == HardwareType.CPU)
                 {
@@ -94,60 +119,40 @@ namespace WindowsFormsApp1.PCParams
             Name = _hardware.Name;
         }
 
-        public static double MaxTemperature
+        public double MaxTemperature
         {
             get
             {
-                if (!Inited)
-                {
-                    Init();
-                }
                 return (double)_temperature.Max;
             }
         }
-        public static double CurTemperature
+        public double CurTemperature
         {
             get
             {
-                if (!Inited)
-                {
-                    Init();
-                }
                 return (double)_temperature.Value;
             }
         }
 
-        public static double MaxRate
+        public double MaxRate
         {
             get
             {
-                if (!Inited)
-                {
-                    Init();
-                }
                 return (double)_rate.Max;
             }
         }
-        public static double CurRate
+        public double CurRate
         {
             get
             {
-                if (!Inited)
-                {
-                    Init();
-                }
                 return (double)_rate.Value;
             }
         }
 
-        public static double CurLoad
+        public double CurLoad
         {
             get
             {
-                if (!Inited)
-                {
-                    Init();
-                }
                 return (double)_load.Value;
             }
         }
@@ -155,39 +160,51 @@ namespace WindowsFormsApp1.PCParams
 
     public class HDD
     {
-        public static bool Inited = false;
+        public static HDD Instatnce
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new HDD();
+                    _instance.Init();
+                }
+                return _instance;
+            }
+        }
+        private static HDD _instance = null;
 
-        private static List<IHardware> _hardwares;
+        private List<IHardware> _hardwares;
 
-        public static int Count;
+        public int Count;
 
-        private static char _char = 'B';
+        private char _char = 'B';
 
-        public static List<string> Names
+        public List<string> Names
         {
             get;
             private set;
         }
 
-        public static List<double> Usages
+        public List<double> Usages
         {
             get;
             private set;
         }
 
-        public static void Init()
+        private void Init()
         {
             _hardwares = new List<IHardware>();
             Names = new List<string>();
             Usages = new List<double>();
-            foreach (var t in PC.Computer.Hardware)
+            foreach (var t in PC.Instatnce.Computer.Hardware)
             {
                 if (t.HardwareType == HardwareType.HDD)
                 {
                     _hardwares.Add(t);
                 }
             }
-            Count = _hardwares.Count-1;
+            Count = _hardwares.Count;
             for (int i = 0; i< Count; i++)
             {
                 _char++;
@@ -204,32 +221,45 @@ namespace WindowsFormsApp1.PCParams
 
     public class RAM
     {
-        public static bool Inited = false;
-        private static IHardware _hardware;
-        private static ISensor _usage;
-        private static ISensor _allocated;
-        private static ISensor _free;
+        public static RAM Instatnce
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new RAM();
+                    _instance.Init();
+                }
+                return _instance;
+            }
+        }
+        private static RAM _instance = null;
 
-        public static double Total
+        private IHardware _hardware;
+        private ISensor _usage;
+        private ISensor _allocated;
+        private ISensor _free;
+
+        public double Total
         {
             get;
             private set;
         }
-        public static double Usage
+        public double Usage
         {
             get
             {
                 return (double)_usage.Value;
             }
         }
-        public static double Allocated
+        public double Allocated
         {
             get
             {
                 return (double)_allocated.Value;
             }
         }
-        public static double Free
+        public double Free
         {
             get
             {
@@ -237,9 +267,9 @@ namespace WindowsFormsApp1.PCParams
             }
         }
 
-        public static void Init()
+        private void Init()
         {
-            foreach (var t in PC.Computer.Hardware)
+            foreach (var t in PC.Instatnce.Computer.Hardware)
             {
                 if (t.HardwareType == HardwareType.RAM)
                 {

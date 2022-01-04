@@ -38,10 +38,6 @@ namespace WindowsFormsApp1
         public Form1()
         {
             InitializeComponent();
-            PCParams.PC.Init();
-            PCParams.CPU.Init();
-            PCParams.HDD.Init();
-            PCParams.RAM.Init();
             SetLabels();
             SetCharts();
             SetDeviceTree();
@@ -77,7 +73,7 @@ namespace WindowsFormsApp1
 
             names = new List<string>
             {
-                PCParams.CPU.Name
+                PCParams.CPU.Instatnce.Name
             };
             AddNodeToTree(ref treeView1, ref index, "Процессор", names);
 
@@ -143,10 +139,10 @@ namespace WindowsFormsApp1
         /// </summary>
         private void SetLabels()
         {
-            groupBox_CPU.Text = PCParams.CPU.Name;
-            HDDQueues = new QueueLimited<double>[PCParams.HDD.Count];
-            HDDCharts = new System.Windows.Forms.DataVisualization.Charting.Chart[PCParams.HDD.Count];
-            for (int i = 0; i < PCParams.HDD.Count; i++)
+            groupBox_CPU.Text = PCParams.CPU.Instatnce.Name;
+            HDDQueues = new QueueLimited<double>[PCParams.HDD.Instatnce.Count];
+            HDDCharts = new System.Windows.Forms.DataVisualization.Charting.Chart[PCParams.HDD.Instatnce.Count];
+            for (int i = 0; i < PCParams.HDD.Instatnce.Count; i++)
             {
                 HDDQueues[i] = new QueueLimited<double>();
                 AddHDDPanelToBox(ref groupBox_HDD, i);
@@ -171,7 +167,7 @@ namespace WindowsFormsApp1
                 _cpuRate.Add(0);
                 _RAMAllocated.Add(0);
                 _bigChart.Add(0);
-                for (int j = 0; j < PCParams.HDD.Count; j++)
+                for (int j = 0; j < PCParams.HDD.Instatnce.Count; j++)
                 {
                     HDDQueues[j].Add(0);
                 }
@@ -196,7 +192,7 @@ namespace WindowsFormsApp1
             chart_CPU_Rate.ChartAreas[0].AxisX.Minimum = 0;
             chart_CPU_Rate.ChartAreas[0].AxisX.Maximum = _cpuRate.Capacity-1;
             chart_CPU_Rate.ChartAreas[0].AxisY.Minimum = 0;
-            chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = PCParams.CPU.MaxRate;
+            chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = PCParams.CPU.Instatnce.MaxRate;
             chart_CPU_Rate.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_CPU_Rate.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
             chart_CPU_Rate.Click += ChangeBigChart;
@@ -204,7 +200,7 @@ namespace WindowsFormsApp1
             chart_RAM.ChartAreas[0].AxisX.Minimum = 0;
             chart_RAM.ChartAreas[0].AxisX.Maximum = _RAMAllocated.Capacity - 1;
             chart_RAM.ChartAreas[0].AxisY.Minimum = 0;
-            chart_RAM.ChartAreas[0].AxisY.Maximum = PCParams.RAM.Total;
+            chart_RAM.ChartAreas[0].AxisY.Maximum = PCParams.RAM.Instatnce.Total;
             chart_RAM.ChartAreas[0].AxisX.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.False;
             chart_RAM.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
             chart_RAM.Click += ChangeBigChart;
@@ -251,10 +247,10 @@ namespace WindowsFormsApp1
         private void UpdateLabels()
         {
            
-            label_RAM_Info.Text = "Занаято памяти " + PCParams.RAM.Allocated.ToString("0.00") + "/" + PCParams.RAM.Total.ToString("0.00") + " ГБайт";
-            label_CPU_temperature.Text = "Температура, " + PCParams.CPU.CurTemperature.ToString("0.00") + " °C";
-            label_CPU_Power.Text = "Нагрузка, " + PCParams.CPU.CurLoad.ToString("0.00") + " %";
-            label_CPU_Rate.Text = "Частота, " + PCParams.CPU.CurRate.ToString("0.00") + " МГц";
+            label_RAM_Info.Text = "Занаято памяти " + PCParams.RAM.Instatnce.Allocated.ToString("0.00") + "/" + PCParams.RAM.Instatnce.Total.ToString("0.00") + " ГБайт";
+            label_CPU_temperature.Text = "Температура, " + PCParams.CPU.Instatnce.CurTemperature.ToString("0.00") + " °C";
+            label_CPU_Power.Text = "Нагрузка, " + PCParams.CPU.Instatnce.CurLoad.ToString("0.00") + " %";
+            label_CPU_Rate.Text = "Частота, " + PCParams.CPU.Instatnce.CurRate.ToString("0.00") + " МГц";
         }
 
         /// <summary>
@@ -289,7 +285,7 @@ namespace WindowsFormsApp1
         private void UpdateChartCPUTemperature()
         {
             
-            _cpuTemperature.Add(PCParams.CPU.CurTemperature);
+            _cpuTemperature.Add(PCParams.CPU.Instatnce.CurTemperature);
             chart_CPU_Temperature.Series[0].Points.Clear();
             int i = 0;
             foreach (var item in _cpuTemperature)
@@ -304,10 +300,10 @@ namespace WindowsFormsApp1
         /// </summary>
         private void UpdateChartCPURate()
         {
-            _cpuRate.Add(PCParams.CPU.CurRate);
-            if (PCParams.CPU.CurRate > chart_CPU_Rate.ChartAreas[0].AxisY.Maximum)
+            _cpuRate.Add(PCParams.CPU.Instatnce.CurRate);
+            if (PCParams.CPU.Instatnce.CurRate > chart_CPU_Rate.ChartAreas[0].AxisY.Maximum)
             {
-                chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = PCParams.CPU.CurRate;
+                chart_CPU_Rate.ChartAreas[0].AxisY.Maximum = PCParams.CPU.Instatnce.CurRate;
             }
             chart_CPU_Rate.Series[0].Points.Clear();
             int i = 0;
@@ -323,7 +319,7 @@ namespace WindowsFormsApp1
         /// </summary>
         private void UpdateChartCPUPower()
         {
-            _cpuPower.Add(PCParams.CPU.CurLoad);
+            _cpuPower.Add(PCParams.CPU.Instatnce.CurLoad);
             chart_CPU_Power.Series[0].Points.Clear();
             int i = 0;
             foreach (var item in _cpuPower)
@@ -338,7 +334,7 @@ namespace WindowsFormsApp1
         /// </summary>
         private void UpdateChartRAMAllocated()
         {
-            var allocated = PCParams.RAM.Allocated;
+            var allocated = PCParams.RAM.Instatnce.Allocated;
             _RAMAllocated.Add(allocated);
             chart_RAM.Series[0].Points.Clear();
             int i = 0;
@@ -355,9 +351,9 @@ namespace WindowsFormsApp1
         private void UpdateHDDCharts()
         {
             int t;
-            for (int i = 0; i < PCParams.HDD.Count; i++)
+            for (int i = 0; i < PCParams.HDD.Instatnce.Count; i++)
             {
-                HDDQueues[i].Add(PCParams.HDD.Usages[i]);
+                HDDQueues[i].Add(PCParams.HDD.Instatnce.Usages[i]);
                 HDDCharts[i].Series[0].Points.Clear();
                 t = 0;
                 foreach (var item in HDDQueues[i])
@@ -373,7 +369,7 @@ namespace WindowsFormsApp1
         /// </summary>
         private void UpdateData()
         {
-            PCParams.PC.Update();
+            PCParams.PC.Instatnce.Update();
         }
 
         /// <summary>
@@ -436,7 +432,7 @@ namespace WindowsFormsApp1
             Label label = new Label
             {
                 Location = new System.Drawing.Point(5, 7),
-                Text = "Диск " + PCParams.HDD.Names[hardIndex]
+                Text = "Диск " + PCParams.HDD.Instatnce.Names[hardIndex]
             };
             label.MouseEnter += panel10_MouseEnter;
             panel.Controls.Add(label);
