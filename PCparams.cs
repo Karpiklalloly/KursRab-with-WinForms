@@ -12,7 +12,7 @@ namespace WindowsFormsApp1.PCParams
 {
     internal class PC
     {
-        public static PC Instatnce
+        public static PC Instance
         {
             get
             {
@@ -82,17 +82,20 @@ namespace WindowsFormsApp1.PCParams
         }
         private static CPU _instance = null;
 
-        private IHardware _hardware;
-        private ISensor _temperature;
+        private IHardware _hardware = null;
+        private ISensor _temperature = null;
         private ISensor _rate = null;
-        private ISensor _load;
+        private ISensor _load = null;
 
-        public string Name;
-
+        public string Name
+        {
+            get;
+            private set;
+        }
 
         private void Init()
         {
-            foreach (var t in PC.Instatnce.Computer.Hardware)
+            foreach (var t in PC.Instance.Computer.Hardware)
             {
                 if (t.HardwareType == HardwareType.CPU)
                 {
@@ -176,7 +179,11 @@ namespace WindowsFormsApp1.PCParams
 
         private List<IHardware> _hardwares;
 
-        public int Count;
+        public int Count
+        {
+            get;
+            private set;
+        }
 
         private char _char = 'B';
 
@@ -186,18 +193,26 @@ namespace WindowsFormsApp1.PCParams
             private set;
         }
 
+        public List<ISensor> _usages;
         public List<double> Usages
         {
-            get;
-            private set;
+            get
+            {
+                List<double> us = new List<double>();
+                foreach (var t in _usages)
+                {
+                    us.Add((double)t.Value);
+                }
+                return us;
+            }
         }
 
         private void Init()
         {
             _hardwares = new List<IHardware>();
             Names = new List<string>();
-            Usages = new List<double>();
-            foreach (var t in PC.Instatnce.Computer.Hardware)
+            _usages = new List<ISensor>();
+            foreach (var t in PC.Instance.Computer.Hardware)
             {
                 if (t.HardwareType == HardwareType.HDD)
                 {
@@ -211,7 +226,7 @@ namespace WindowsFormsApp1.PCParams
                 Names.Add(_char + @"");
                 foreach (var t in _hardwares[i].Sensors)
                 {
-                    Usages.Add((double)t.Value);
+                    _usages.Add(t);
                 }
             }
             
@@ -269,7 +284,7 @@ namespace WindowsFormsApp1.PCParams
 
         private void Init()
         {
-            foreach (var t in PC.Instatnce.Computer.Hardware)
+            foreach (var t in PC.Instance.Computer.Hardware)
             {
                 if (t.HardwareType == HardwareType.RAM)
                 {

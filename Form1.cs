@@ -369,7 +369,7 @@ namespace WindowsFormsApp1
         /// </summary>
         private void UpdateData()
         {
-            PCParams.PC.Instatnce.Update();
+            PCParams.PC.Instance.Update();
         }
 
         /// <summary>
