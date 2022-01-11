@@ -379,7 +379,7 @@ namespace WindowsFormsApp1
         /// <param name="ClassItemField">Параметр класса</param>
         /// <param name="isFromRoot"></param>
         /// <returns></returns>
-        public static List<string> GetHardwareInfo(string WIN32_Class, string ClassItemField)
+        private List<string> GetHardwareInfo(string WIN32_Class, string ClassItemField)
         {
             List<string> result = new List<string>();
             ManagementObjectSearcher searcher;
