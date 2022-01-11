@@ -112,7 +112,10 @@ namespace WindowsFormsApp1.PCParams
                 }
                 else if (t.SensorType == SensorType.Clock)
                 {
-                    _rate = t;
+                    if (t.Name != "Bus Speed")
+                    {
+                        _rate = t;
+                    }
                 }
                 else if (t.SensorType == SensorType.Load)
                 {
